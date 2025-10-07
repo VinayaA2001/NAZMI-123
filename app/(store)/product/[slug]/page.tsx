@@ -1,4 +1,3 @@
-// app/(store)/product/[slug]/page.tsx
 export default function ProductPage({ params }: { params: { slug: string } }) {
   return (
     <section className="container py-10">
