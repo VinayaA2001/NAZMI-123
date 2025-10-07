@@ -40,7 +40,7 @@ export default function WesternPage() {
 
         {/* Tops & Shirts */}
         <Link
-          href="/western/Tops"
+          href="/western/tops"
           className="border rounded-lg p-4 hover:shadow-lg transition flex flex-col"
         >
           <img
