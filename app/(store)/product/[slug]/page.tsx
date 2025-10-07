@@ -1,7 +1,5 @@
 // app/(store)/product/[slug]/page.tsx
-type Props = { params: { slug: string } };
-
-export default function ProductPage({ params }: Props) {
+export default function ProductPage({ params }: { params: { slug: string } }) {
   return (
     <section className="container py-10">
       <h1 className="text-xl md:text-2xl font-semibold">
