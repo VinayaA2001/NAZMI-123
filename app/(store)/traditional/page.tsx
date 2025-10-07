@@ -9,22 +9,22 @@ export default function TraditionalPage() {
         {/* Ethnic Dresses */}
         <Link href="/traditional/ethnic-dresses" className="border rounded-lg p-4 block hover:shadow-lg transition">
           <img
-            src="/images/churidhar2.png"
+            src="/images/churidhar1.png"
             alt="Ethnic Dresses"
             className="w-full h-64 object-cover rounded-md"
           />
-          <h2 className="mt-2 font-semibold">Ethnic Dresses</h2>
+          <h2 className="text-xl font-semibold">Ethnic Dresses</h2>
           <p>Explore traditional anarkalis & gowns</p>
         </Link>
 
         {/* Festive Edits */}
         <Link href="/traditional/festive-edits" className="border rounded-lg p-4 block hover:shadow-lg transition">
           <img
-            src="/images/churidhar1.png"
+            src="/images/churidhar2.png"
             alt="Festive Edits"
             className="w-full h-64 object-cover rounded-md"
           />
-          <h2 className="mt-2 font-semibold">Festive Edits</h2>
+          <h2 className="text-xl font-semibold">Festive Edits</h2>
           <p>Special picks for celebrations</p>
         </Link>
 
@@ -35,7 +35,7 @@ export default function TraditionalPage() {
             alt="Kurta & Sets"
             className="w-full h-64 object-cover rounded-md"
           />
-          <h2 className="mt-2 font-semibold">Kurta & Sets</h2>
+          <h2 className="text-xl font-semibold">Kurta & Sets</h2>
           <p>Stylish & comfortable sets</p>
         </Link>
       </div>

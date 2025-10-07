@@ -7,11 +7,11 @@
         {/* Example Festive Outfit */}
         <div className="border rounded-lg p-4">
           <img
-            src="/images/churidhar1.png"
-            alt="Festive Lehenga"
+            src="/images/sharara.png"
+            alt="Sharara"
             className="w-full h-64 object-cover rounded-md"
           />
-          <h2 className="mt-2 font-semibold">Festive Lehenga</h2>
+          <h2 className="mt-2 font-semibold">Sharara</h2>
           <p>₹2499</p>
           <button className="mt-2 px-4 py-2 bg-black text-white rounded">
             Add to Cart
@@ -20,11 +20,11 @@
 
         <div className="border rounded-lg p-4">
           <img
-            src="/images/churidhar1.png"
-            alt="Festive Saree"
+            src="/images/churidhar6.png"
+            alt="Festive Churidhar"
             className="w-full h-64 object-cover rounded-md"
           />
-          <h2 className="mt-2 font-semibold">Festive Saree</h2>
+          <h2 className="mt-2 font-semibold"> Churidhar</h2>
           <p>₹2199</p>
           <button className="mt-2 px-4 py-2 bg-black text-white rounded">
             Add to Cart

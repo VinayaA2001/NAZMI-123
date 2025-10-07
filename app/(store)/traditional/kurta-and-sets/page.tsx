@@ -6,7 +6,7 @@
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="border rounded-lg p-4">
           <img
-            src="/images/kurta set.png"
+            src="/images/kurta1.png"
             alt="Cotton Kurta Set"
             className="w-full h-64 object-cover rounded-md"
           />
@@ -19,7 +19,7 @@
 
         <div className="border rounded-lg p-4">
           <img
-            src="/images/kurta set.png"
+            src="/images/kurta2.png"
             alt="Embroidered Kurta Set"
             className="w-full h-64 object-cover rounded-md"
           />
