@@ -18,13 +18,19 @@ export default function Header() {
 
     loadCounts();
     window.addEventListener("storage", loadCounts);
-    return () => window.removeEventListener("storage", loadCounts);
+    window.addEventListener("wishlist-updated", loadCounts); // 👈 custom event
+    window.addEventListener("cart-updated", loadCounts);     // 👈 for cart too
+
+    return () => {
+      window.removeEventListener("storage", loadCounts);
+      window.removeEventListener("wishlist-updated", loadCounts);
+      window.removeEventListener("cart-updated", loadCounts);
+    };
   }, []);
 
   return (
     <header className="border-b bg-white sticky top-0 z-50 w-full">
       <div className="w-full px-6 h-16 flex items-center justify-between">
-        
         {/* ✅ Logo on the left */}
         <Link href="/" className="flex items-center">
           <Image
@@ -39,10 +45,9 @@ export default function Header() {
 
         {/* ✅ Navigation Center */}
         <nav className="hidden md:flex gap-8 text-sm font-medium">
-          <Link href="/" className="hover:text-gray-700">Home</Link> {/* 👈 Added Home */}
+          <Link href="/" className="hover:text-gray-700">Home</Link>
           <Link href="/traditional" className="hover:text-gray-700">Traditional</Link>
           <Link href="/western" className="hover:text-gray-700">Western</Link>
-          <Link href="/occasions/office" className="hover:text-gray-700">Occasions</Link>
           <Link href="/sale/under-999" className="text-red-600 hover:text-red-700">Sale</Link>
         </nav>
 
@@ -60,7 +65,7 @@ export default function Header() {
 
           {/* Wishlist */}
           <Link href="/wishlist" className="relative hover:text-gray-700">
-            <Heart className="w-5 h-5" />
+            <Heart className={`w-5 h-5 ${wishlistCount > 0 ? "fill-red-500 text-red-500" : ""}`} />
             {wishlistCount > 0 && (
               <span className="absolute -top-2 -right-2 text-xs bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full">
                 {wishlistCount}
