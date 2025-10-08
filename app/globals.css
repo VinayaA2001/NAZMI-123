@@ -6,8 +6,15 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+
+/* Use Google Fonts (from next/font variables) */
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial;
+  font-family: var(--font-poppins), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.title-1, .title-2, .heading {
+  font-family: var(--font-playfair), serif;
 }
 
 /* Custom components (put @apply inside a Tailwind layer) */
@@ -24,6 +31,7 @@ body {
 
 /* Optional helper */
 .container { max-width: 1120px; }
+
 /* --- Slomo helpers --- */
 @keyframes kenburns {
   0%   { transform: scale(1.05); }

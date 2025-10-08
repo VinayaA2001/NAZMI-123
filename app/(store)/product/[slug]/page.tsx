@@ -1,10 +1,11 @@
 // app/(store)/product/[slug]/page.tsx
 
-export default function ProductPage({
-  params,
-}: {
+interface ProductPageProps {
   params: { slug: string };
-}) {
+  searchParams?: Record<string, string | string[] | undefined>;
+}
+
+export default function ProductPage({ params }: ProductPageProps) {
   const slug = decodeURIComponent(params.slug);
 
   return (

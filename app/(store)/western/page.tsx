@@ -28,7 +28,7 @@ export default function WesternPage() {
           className="border rounded-lg p-4 hover:shadow-lg transition flex flex-col"
         >
           <img
-            src="/images/Office.png"
+            src="/images/Office2.png"
             alt="Officewear"
             className="w-full h-64 object-cover rounded-md"
           />
