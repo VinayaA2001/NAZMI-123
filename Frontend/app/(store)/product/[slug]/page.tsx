@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
+import { use } from "react"; // Import the use hook
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +16,7 @@ interface Product {
   category: string;
   featured: boolean;
   stock: number;
+  images?: string[]; // Added for the enhanced product data
 }
 
 interface ProductPageProps {
@@ -24,8 +26,8 @@ interface ProductPageProps {
 
 export default function ProductPage({ params }: ProductPageProps) {
   // Unwrap the params promise using React.use()
-  const resolvedParams = use(params);
-  const slug = decodeURIComponent(resolvedParams.slug);
+  const unwrappedParams = use(params);
+  const slug = decodeURIComponent(unwrappedParams.slug);
   
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -523,7 +525,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             {relatedProducts.map((relatedProduct) => (
               <Link
                 key={relatedProduct.id}
-                href={`/product/${encodeURIComponent(relatedProduct.name)}`}
+                href={`/product/${encodeURIComponent(relatedProduct.name.toLowerCase().replace(/\s+/g, '-'))}`}
                 className="group"
               >
                 <div className="bg-gray-100 rounded-xl overflow-hidden aspect-square mb-4">
