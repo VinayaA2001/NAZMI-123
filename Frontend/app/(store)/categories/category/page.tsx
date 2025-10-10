@@ -205,26 +205,28 @@ const categoryProducts = [
 ];
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     category: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     sort?: string;
     price?: string;
     size?: string;
     page?: string;
-  };
+  }>;
 }
 
-export default function CategoryPage({ params, searchParams }: CategoryPageProps) {
-  const category = categoryData[params.category];
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
+  const resolvedParams = await params;
+  const categoryKey = resolvedParams.category;
+  const category = categoryData[categoryKey];
   
   if (!category) {
     notFound();
   }
 
   const filteredProducts = categoryProducts.filter(product => 
-    product.category === params.category
+    product.category === categoryKey
   );
 
   return (
@@ -262,7 +264,7 @@ export default function CategoryPage({ params, searchParams }: CategoryPageProps
             <div className="lg:sticky lg:top-4">
               <CategoryFilters 
                 filters={category.filters} 
-                category={params.category}
+                category={categoryKey}
               />
             </div>
           </div>
@@ -276,7 +278,7 @@ export default function CategoryPage({ params, searchParams }: CategoryPageProps
                 {category.subcategories.map((subcat: any) => (
                   <Link
                     key={subcat.id}
-                    href={`/${params.category}/${subcat.id}`}
+                    href={`/${categoryKey}/${subcat.id}`}
                     className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:border-black hover:text-black transition-colors"
                   >
                     {subcat.name}
@@ -293,7 +295,7 @@ export default function CategoryPage({ params, searchParams }: CategoryPageProps
               <div>
                 <p className="text-gray-600">
                   Showing <span className="font-semibold">{filteredProducts.length}</span> products
-                  {params.category && (
+                  {categoryKey && (
                     <span className="ml-2 text-sm text-gray-500">
                       in {category.name}
                     </span>
