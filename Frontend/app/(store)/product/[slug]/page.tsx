@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { use } from "react"; // Import the use hook
+import { use } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,17 +16,18 @@ interface Product {
   category: string;
   featured: boolean;
   stock: number;
-  images?: string[]; // Added for the enhanced product data
+  images?: string[];
 }
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
-  searchParams?: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default function ProductPage({ params }: ProductPageProps) {
+export default function ProductPage({ params, searchParams }: ProductPageProps) {
   // Unwrap the params promise using React.use()
   const unwrappedParams = use(params);
+  const unwrappedSearchParams = use(searchParams);
   const slug = decodeURIComponent(unwrappedParams.slug);
   
   const [product, setProduct] = useState<Product | null>(null);
