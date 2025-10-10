@@ -2,6 +2,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { use } from 'react';
 import ProductGrid from '@/components/commerce/ProductGrid';
 import { CategoryFilters } from '@/components/CategoryFilter';
 
@@ -206,13 +207,17 @@ const categoryProducts = [
 
 interface CategoryPageProps {
   params: Promise<{
+  params: Promise<{
     category: string;
+  }>;
+  searchParams: Promise<{
   }>;
   searchParams: Promise<{
     sort?: string;
     price?: string;
     size?: string;
     page?: string;
+  }>;
   }>;
 }
 

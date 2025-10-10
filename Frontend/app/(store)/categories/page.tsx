@@ -2,7 +2,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-const categories = [
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  subcategories: string[];
+  count: number;
+}
+
+const categories: Category[] = [
   {
     id: 'traditional',
     name: 'Traditional Wear',
@@ -62,6 +71,8 @@ export default function CategoriesPage() {
                   alt={category.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority={category.id === 'traditional'} // Prioritize first image
                 />
                 <div className="absolute bottom-4 left-4 z-20">
                   <h2 className="text-xl font-bold text-white">{category.name}</h2>

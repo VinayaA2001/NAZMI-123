@@ -1,13 +1,9 @@
-// next.config.js
-/** @type {import('next').NextConfig} */
+﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
-  compiler: {
-    styledComponents: true,
-    // Disable styled-jsx
-    styledJsx: false,
-  },
-  experimental: {
-    serverComponentsExternalPackages: [],
+  serverExternalPackages: ['razorpay'],
+  outputFileTracingRoot: __dirname,
+  images: {
+    domains: ['localhost'],
   },
 }
 
