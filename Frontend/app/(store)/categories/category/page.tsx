@@ -207,17 +207,13 @@ const categoryProducts = [
 
 interface CategoryPageProps {
   params: Promise<{
-  params: Promise<{
     category: string;
-  }>;
-  searchParams: Promise<{
   }>;
   searchParams: Promise<{
     sort?: string;
     price?: string;
     size?: string;
     page?: string;
-  }>;
   }>;
 }
 
