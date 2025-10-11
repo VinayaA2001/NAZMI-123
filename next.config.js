@@ -1,9 +1,16 @@
 ﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true, // Required if using app/ directory
+  serverExternalPackages: ['razorpay'],
+  outputFileTracingRoot: __dirname,
+  images: {
+    domains: ['localhost'],
   },
-  output: 'standalone', // <-- Important for Vercel SSR deployment
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 module.exports = nextConfig

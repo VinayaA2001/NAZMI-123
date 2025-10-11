@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Product } from '@/lib/data';
+import SizeGuide from './SizeGuide';
 
 interface ProductCardProps {
   product: Product;
@@ -51,6 +52,11 @@ export default function ProductCard({ product }: ProductCardProps) {
               <span className="text-sm text-gray-500 line-through">₹{product.originalPrice}</span>
             )}
           </div>
+        </div>
+
+        {/* Size Guide Added Here */}
+        <div className="mb-3">
+          <SizeGuide productType="clothing" className="text-xs" />
         </div>
         
         <div className="flex gap-2">

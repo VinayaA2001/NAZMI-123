@@ -6,14 +6,17 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const SLIDES = [
   { 
+    id: 1,
     src: "/images/poster1.png", 
     alt: "Summer Collection",
   },
   { 
+    id: 2,
     src: "/images/poster2.png", 
     alt: "New Arrivals",
   },
   { 
+    id: 3,
     src: "/images/poster3.png", 
     alt: "Limited Time Offer",
   },
@@ -137,7 +140,7 @@ export default function Slomo() {
 
   return (
     <section
-      className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] overflow-hidden bg-gray-100 group"
+      className="relative w-full overflow-hidden bg-black"
       role="region"
       aria-label="Featured promotions carousel"
       onKeyDown={handleKeyDown}
@@ -145,81 +148,105 @@ export default function Slomo() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Progress Bar */}
-      {isPlaying && totalSlides > 1 && (
-        <div className="absolute top-0 left-0 right-0 z-30 h-1 bg-white/20">
-          <div
-            className="h-full bg-white transition-all duration-50 ease-linear"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      )}
-
-      {/* Slides Container */}
-      <div className="relative w-full h-full">
-        {SLIDES.map((slide, index) => (
-          <div
-            key={slide.src}
-            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-              index === currentIndex 
-                ? "opacity-100 z-10" 
-                : "opacity-0 z-0 pointer-events-none"
-            }`}
-          >
-            <Image
-              src={slide.src}
-              alt={slide.alt}
-              fill
-              priority={index === 0}
-              sizes="100vw"
-              className="object-cover w-full h-full"
-              quality={90}
+      {/* Fixed Height Container - No gaps */}
+      <div className="relative w-full h-[70vh] min-h-[500px] max-h-[800px]">
+        {/* Progress Bar */}
+        {isPlaying && totalSlides > 1 && (
+          <div className="absolute top-0 left-0 right-0 z-30 h-1 bg-white/20">
+            <div
+              className="h-full bg-white transition-all duration-50 ease-linear"
+              style={{ width: `${progress}%` }}
             />
           </div>
-        ))}
-      </div>
+        )}
 
-      {/* Navigation Arrows */}
-      {totalSlides > 1 && (
-        <>
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-3 transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 z-20 backdrop-blur-sm"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-3 transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 z-20 backdrop-blur-sm"
-            aria-label="Next slide"
-          >
-            <ChevronRight size={20} />
-          </button>
-        </>
-      )}
-
-      {/* Slide Indicators */}
-      {totalSlides > 1 && (
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
-          <div className="flex items-center gap-2 bg-black/40 backdrop-blur-sm rounded-full px-4 py-2">
-            {SLIDES.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "bg-white scale-125"
-                    : "bg-white/50 hover:bg-white/70"
-                }`}
-                aria-label={`Go to promotion ${index + 1}`}
-                aria-current={index === currentIndex ? "true" : "false"}
+        {/* Slides Container - Full screen without gaps */}
+        <div className="relative w-full h-full">
+          {SLIDES.map((slide, index) => (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
+                index === currentIndex 
+                  ? "opacity-100 z-10" 
+                  : "opacity-0 z-0 pointer-events-none"
+              }`}
+            >
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                className="object-cover select-none"
+                quality={90}
+                draggable={false}
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+
+        {/* Navigation Arrows */}
+        {totalSlides > 1 && (
+          <>
+            <button
+              onClick={prevSlide}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-3 transition-all duration-300 z-20 backdrop-blur-sm"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            
+            <button
+              onClick={nextSlide}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-3 transition-all duration-300 z-20 backdrop-blur-sm"
+              aria-label="Next slide"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </>
+        )}
+
+        {/* Slide Indicators */}
+        {totalSlides > 1 && (
+          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
+            <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2">
+              {SLIDES.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentIndex
+                      ? "bg-white scale-125"
+                      : "bg-white/50 hover:bg-white/70"
+                  }`}
+                  aria-label={`Go to promotion ${index + 1}`}
+                  aria-current={index === currentIndex ? "true" : "false"}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Play/Pause Button */}
+        {totalSlides > 1 && (
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all duration-300 z-20 backdrop-blur-sm"
+            aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+          >
+            <div className="w-5 h-5 flex items-center justify-center">
+              {isPlaying ? (
+                <div className="flex gap-0.5">
+                  <div className="w-1 h-3 bg-white"></div>
+                  <div className="w-1 h-3 bg-white"></div>
+                </div>
+              ) : (
+                <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent border-r-0 ml-0.5"></div>
+              )}
+            </div>
+          </button>
+        )}
+      </div>
     </section>
   );
 }

@@ -27,77 +27,46 @@ const playfair = Playfair_Display({
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#6D7E5F', // Your brand color
+  themeColor: '#8B4513', // Rich brown for luxury feel
   colorScheme: 'light',
 }
 
 /* ---- SEO METADATA ---- */
 export const metadata: Metadata = {
   title: {
-    default: "Nazmi Boutique – Traditional & Western Wear for Women",
+    default: "Nazmi Boutique | Premium Traditional & Western Wear",
     template: "%s | Nazmi Boutique",
   },
-  description:
-    "Shop the latest trends in traditional and western wear for women at Nazmi Boutique. Discover sarees, kurtis, gowns, tops, skirts, and officewear – elegant fashion from Kerala with a modern twist.",
-  keywords: [
-    "Nazmi Boutique",
-    "Kerala Boutique",
-    "Women's Fashion",
-    "Traditional Wear",
-    "Western Wear",
-    "Ethnic Wear",
-    "Officewear",
-    "Jeans",
-    "Croptops",
-    "Kurtis",
-    "Tops",
-    "Dresses",
-    "Online Boutique India",
-    "Affordable Fashion",
-    "Kerala Fashion",
-    "Indian Boutique",
-    "Traditional Sarees",
-    "Western Dresses",
-  ],
+  description: "Discover elegant fashion blending traditional Kerala craftsmanship with contemporary western styles. Premium quality sarees, kurtis, dresses, and officewear for the modern woman.",
+  keywords: ["Nazmi Boutique", "Premium Fashion", "Traditional Wear", "Western Wear", "Kerala Boutique", "Women's Clothing", "Ethnic Fashion", "Designer Wear"],
   authors: [{ name: "Nazmi Boutique" }],
   creator: "Nazmi Boutique",
   publisher: "Nazmi Boutique",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL('https://nazmi.onrender.com'),
+  metadataBase: new URL('https://nazmiboutique.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "Nazmi Boutique – Traditional & Western Wear for Women",
-    description:
-      "Discover elegant, minimal, and trendy outfits for every occasion. From sarees to skirts, explore Nazmi Boutique's traditional and western collections.",
-    url: "https://nazmi.onrender.com",
+    title: "Nazmi Boutique | Elegant Traditional & Western Fashion",
+    description: "Premium quality clothing blending Kerala's traditional artistry with contemporary western designs for the modern woman.",
+    url: "https://nazmiboutique.com",
     siteName: "Nazmi Boutique",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Nazmi Boutique – Elegant Traditional & Western Wear",
+        alt: "Nazmi Boutique - Premium Fashion",
       },
     ],
     locale: "en_IN",
     type: "website",
-    emails: ["hello@nazmi.com"],
-    phoneNumbers: ["+919995947709"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nazmi Boutique – Traditional & Western Wear for Women",
-    description:
-      "Shop minimal, elegant fashion from Nazmi Boutique — blending traditional and western styles with Kerala's unique touch.",
-    images: ["/og-image.png"],
-    creator: "@nazmiboutique",
-    site: "@nazmiboutique",
+    title: "Nazmi Boutique | Premium Fashion",
+    description: "Elegant traditional and western wear for the modern woman.",
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -110,20 +79,17 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    // Add when you have Google Search Console verification
-    // google: 'your-google-verification-code',
-  },
   icons: {
     icon: [
       { url: '/favicon.ico' },
-      { url: '/icon.png', type: 'image/png', sizes: '32x32' },
+      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
     ],
     apple: [
       { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
-  manifest: '/manifest.webmanifest', // Add for PWA
+  manifest: '/manifest.webmanifest',
 };
 
 /* ---- ROOT LAYOUT ---- */
@@ -134,66 +100,88 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en-IN" // Changed to en-IN for Indian audience
+      lang="en-IN"
       className={`${poppins.variable} ${playfair.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <head>
-        {/* Preload critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         
-        {/* Structured Data for SEO */}
+        {/* Enhanced Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "ClothingStore",
+              "@type": "FashionBoutique",
               "name": "Nazmi Boutique",
-              "description": "Minimal fashion from Kerala blending Traditional & Western styles with elegance",
-              "url": "https://nazmi.onrender.com",
+              "description": "Premium traditional and western wear blending Kerala craftsmanship with contemporary designs",
+              "url": "https://nazmiboutique.com",
               "telephone": "+91-99959-47709",
-              "email": "hello@nazmi.com",
+              "email": "nazmiboutique1@gmail.com",
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Kerala",
                 "addressCountry": "IN"
               },
               "openingHours": "Mo-Su 09:00-21:00",
-              "priceRange": "₹799 - ₹3599",
+              "priceRange": "₹799 - ₹5,999",
               "currenciesAccepted": "INR",
-              "paymentAccepted": "Cash, Credit Card, Debit Card, UPI",
-              "sameAs": [
-                "https://www.instagram.com/nazmiboutique_",
-                "https://www.facebook.com/share/19oRd6Jgyu/",
-                "https://youtube.com/@nazmiboutique-vl6id"
-              ]
+              "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Fashion Collections",
+                "itemListElement": [
+                  {
+                    "@type": "OfferCatalog",
+                    "name": "Traditional Wear",
+                    "itemListElement": [
+                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Sarees"}},
+                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Kurtis"}},
+                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Ethnic Sets"}}
+                    ]
+                  },
+                  {
+                    "@type": "OfferCatalog",
+                    "name": "Western Wear",
+                    "itemListElement": [
+                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Dresses"}},
+                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Tops"}},
+                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Officewear"}}
+                    ]
+                  }
+                ]
+              }
             })
           }}
         />
       </head>
-      <body className="min-h-dvh flex flex-col bg-white text-neutral-900 font-sans antialiased selection:bg-[#6D7E5F]/20">
-        {/* Global Header */}
+      <body className="min-h-dvh flex flex-col bg-white text-gray-900 font-sans antialiased selection:bg-amber-900/20">
+        {/* Enhanced Header */}
         <Header />
 
-        {/* Page Content with smooth loading */}
-        <main className="flex-1 relative">
+        {/* Smooth Main Content */}
+        <main className="flex-1 w-full overflow-hidden">
           {children}
         </main>
 
-        {/* Global Footer */}
+        {/* Enhanced Footer */}
         <Footer />
 
-        {/* Floating WhatsApp Button */}
-        <WhatsAppButton
-          phone="+919995947709"
-          preset="Hi Nazmi! I have a question about your boutique."
-        />
+        {/* Premium WhatsApp Button - Fixed */}
+        <div className="fixed bottom-6 right-6 z-40">
+          <WhatsAppButton
+            phone="+919995947709"
+            preset="Hello Nazmi Boutique! I'd like to know more about your collections."
+          />
+        </div>
 
-        {/* Loading Spinner for route transitions */}
-        <div id="loading-spinner" className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#6D7E5F]"></div>
+        {/* Enhanced Loading Spinner */}
+        <div id="loading-spinner" className="fixed inset-0 bg-white/90 backdrop-blur-md flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-500">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-amber-900/20 border-t-amber-900 mb-4"></div>
+            <p className="text-gray-600 font-medium">Loading Nazmi Boutique...</p>
+          </div>
         </div>
       </body>
     </html>
