@@ -1,1 +1,13 @@
+<<<<<<< HEAD
+=======
+﻿node_modules/
+.next/
+out/
+.vercel/
+.env*
+*.log
+.vscode/
+.DS_Store
+Thumbs.db
+>>>>>>> cf4494badfd7f264aea27ec4783f56d4b450f113
 .vercel

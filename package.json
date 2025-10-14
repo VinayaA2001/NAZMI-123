@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "nazmi-ecommerce",
   "version": "1.0.0",
   "description": "E-commerce platform with Next.js frontend and Flask backend",
@@ -19,5 +20,45 @@
   },
   "dependencies": {
     "nodemailer": "^7.0.9"
+=======
+  "name": "nazmi-boutique",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "dev:fullstack": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd ../Backend && python app.py",
+    "dev:frontend": "next dev",
+    "start:backend": "cd ../Backend && python app.py",
+    "start:frontend": "next start"
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
+    "@next/mdx": "^15.5.4",
+    "@stripe/react-stripe-js": "^5.2.0",
+    "@stripe/stripe-js": "^8.0.0",
+    "cloudinary": "^2.7.0",
+    "cloudinary-react": "^1.8.1",
+    "concurrently": "^7.6.0",
+    "lucide-react": "^0.544.0",
+    "mdx": "^0.3.1",
+    "next": "^15.5.4",
+    "nodemailer": "^7.0.9",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "stripe": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.6.2",
+    "@types/nodemailer": "^7.0.2",
+    "@types/react": "19.2.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.10",
+    "typescript": "5.9.3"
+>>>>>>> cf4494badfd7f264aea27ec4783f56d4b450f113
   }
 }
