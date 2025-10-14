@@ -18,10 +18,13 @@
     "@next/mdx": "^15.5.4",
     "@stripe/react-stripe-js": "^5.2.0",
     "@stripe/stripe-js": "^8.0.0",
+    "cloudinary": "^2.7.0",
+    "cloudinary-react": "^1.8.1",
     "concurrently": "^7.6.0",
     "lucide-react": "^0.544.0",
     "mdx": "^0.3.1",
     "next": "^15.5.4",
+    "nodemailer": "^7.0.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "stripe": "^19.1.0"

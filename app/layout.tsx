@@ -136,7 +136,7 @@ export default function RootLayout({
                     "@type": "OfferCatalog",
                     "name": "Traditional Wear",
                     "itemListElement": [
-                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Sarees"}},
+                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Festive Wear"}},
                       {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Kurtis"}},
                       {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Ethnic Sets"}}
                     ]

@@ -29,6 +29,12 @@ interface EmailOptions {
 }
 
 class EmailService {
+  sendShippingConfirmation(email: any, data: any): any {
+    throw new Error("Method not implemented.");
+  }
+  sendCustomEmail(to: any, subject: any, templateData: any, arg3: any): any {
+    throw new Error("Method not implemented.");
+  }
   private transporter: nodemailer.Transporter | null = null;
   private isConfigured: boolean = false;
   private isTestAccount: boolean = false;
@@ -58,7 +64,7 @@ class EmailService {
         },
       };
 
-      this.transporter = nodemailer.createTransporter(emailConfig);
+      this.transporter = nodemailer.createTransport(emailConfig);
       this.isConfigured = true;
       this.isTestAccount = false;
 
@@ -75,7 +81,7 @@ class EmailService {
       console.log('Creating test email account...');
       const testAccount = await nodemailer.createTestAccount();
       
-      this.transporter = nodemailer.createTransporter({
+      this.transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
         secure: false,

@@ -20,7 +20,7 @@ export default function TraditionalPage() {
     },
     {
       href: "/traditional/kurta-and-sets",
-      image: "/images/kurta-set.png",
+      image: "/images/kurta1.png",
       title: "Kurta & Sets",
       description: "Stylish & comfortable sets"
     }

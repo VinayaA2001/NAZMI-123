@@ -1,7 +1,7 @@
 ﻿﻿// app/traditional/kurta-and-sets/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -27,6 +27,27 @@ export default function KurtaAndSetsPage() {
   const [selectedColor, setSelectedColor] = useState("");
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [zoomImage, setZoomImage] = useState("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [addingToCart, setAddingToCart] = useState<number | null>(null);
+  const [addingToWishlist, setAddingToWishlist] = useState<number | null>(null);
+  const [wishlistItems, setWishlistItems] = useState<Set<number>>(new Set());
+
+  // Load wishlist from localStorage on component mount
+  useEffect(() => {
+    try {
+      const savedWishlist = localStorage.getItem("wishlist");
+      if (savedWishlist) {
+        const parsedWishlist = JSON.parse(savedWishlist);
+        if (Array.isArray(parsedWishlist)) {
+          const wishlistIds = new Set(parsedWishlist.map((item: any) => item.id));
+          setWishlistItems(wishlistIds);
+        }
+      }
+    } catch (error) {
+      console.error("Error loading wishlist from localStorage:", error);
+      setWishlistItems(new Set());
+    }
+  }, []);
 
   const products: Product[] = [
     {
@@ -411,6 +432,122 @@ export default function KurtaAndSetsPage() {
     }
   ];
 
+  // Add to Cart Function - No alerts
+  const addToCart = async (product: Product, size: string = "", color: string = "") => {
+    setAddingToCart(product.id);
+    
+    try {
+      const selectedSize = size || (product.sizes.length > 0 ? product.sizes[0] : "");
+      const selectedColor = color || (product.colors.length > 0 ? product.colors[0].name : "");
+      
+      const cartItem = {
+        id: `${product.id}-${selectedSize}-${selectedColor}`,
+        productId: product.id,
+        name: product.title,
+        price: product.price,
+        image: product.images[0],
+        quantity: 1,
+        size: selectedSize,
+        color: selectedColor
+      };
+
+      // Get existing cart from localStorage with proper error handling
+      let existingCart = [];
+      try {
+        const cartData = localStorage.getItem("cart");
+        if (cartData) {
+          existingCart = JSON.parse(cartData);
+        }
+      } catch (error) {
+        console.error("Error reading cart from localStorage:", error);
+        existingCart = [];
+      }
+
+      const existingItemIndex = existingCart.findIndex(
+        (item: any) => item.id === cartItem.id
+      );
+
+      let updatedCart;
+      if (existingItemIndex > -1) {
+        // Update quantity if item exists
+        updatedCart = existingCart.map((item: any, index: number) =>
+          index === existingItemIndex
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        // Add new item
+        updatedCart = [...existingCart, cartItem];
+      }
+
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      
+      // Dispatch event for header update - this will update the cart count in header
+      window.dispatchEvent(new Event('cartUpdated'));
+      
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    } finally {
+      setAddingToCart(null);
+    }
+  };
+
+  // Add to Wishlist Function - No alerts
+  const addToWishlist = async (product: Product) => {
+    setAddingToWishlist(product.id);
+    
+    try {
+      const wishlistItem = {
+        id: product.id,
+        productId: product.id,
+        name: product.title,
+        price: product.price,
+        image: product.images[0]
+      };
+
+      // Get existing wishlist from localStorage with proper error handling
+      let existingWishlist = [];
+      try {
+        const wishlistData = localStorage.getItem("wishlist");
+        if (wishlistData) {
+          existingWishlist = JSON.parse(wishlistData);
+        }
+      } catch (error) {
+        console.error("Error reading wishlist from localStorage:", error);
+        existingWishlist = [];
+      }
+
+      const existingItemIndex = existingWishlist.findIndex(
+        (item: any) => item.id === wishlistItem.id
+      );
+
+      let updatedWishlist;
+      if (existingItemIndex > -1) {
+        // Remove if already in wishlist
+        updatedWishlist = existingWishlist.filter((item: any) => item.id !== wishlistItem.id);
+        setWishlistItems(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(product.id);
+          return newSet;
+        });
+      } else {
+        // Add to wishlist
+        updatedWishlist = [...existingWishlist, wishlistItem];
+        setWishlistItems(prev => new Set(prev).add(product.id));
+      }
+
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      
+      // Dispatch event for header update
+      window.dispatchEvent(new Event('wishlistUpdated'));
+      
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
+    } finally {
+      setAddingToWishlist(null);
+    }
+  };
+
   const handleOrder = (product: Product) => {
     if (!selectedSize || !selectedColor) {
       alert("Please select size and color before ordering");
@@ -421,6 +558,31 @@ export default function KurtaAndSetsPage() {
 
   const handleImageClick = (image: string) => {
     setZoomImage(image);
+  };
+
+  const handleQuickAddToCart = (product: Product, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (product.sizes.length === 1 && product.colors.length === 1) {
+      // If only one size and color, add directly to cart
+      addToCart(product, product.sizes[0], product.colors[0].name);
+    } else {
+      // If multiple options, open quick view
+      setSelectedProduct(product);
+      setSelectedSize(product.sizes[0] || "");
+      setSelectedColor(product.colors[0]?.name || "");
+    }
+  };
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setSelectedSize(product.sizes[0] || "");
+    setSelectedColor(product.colors[0]?.name || "");
+    setSelectedImageIndex(0);
+  };
+
+  // Check if product is in wishlist
+  const isInWishlist = (productId: number) => {
+    return wishlistItems.has(productId);
   };
 
   return (
@@ -442,24 +604,71 @@ export default function KurtaAndSetsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => (
-            <div key={product.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-400 transition-colors">
+            <div 
+              key={product.id} 
+              className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-400 transition-colors group cursor-pointer"
+              onClick={() => handleProductClick(product)}
+            >
               {/* Product Image */}
               <div className="relative h-80 overflow-hidden">
                 <Image
                   src={product.images[0]}
                   alt={product.title}
                   fill
-                  className="object-cover hover:scale-105 transition duration-300 cursor-pointer"
-                  onClick={() => setSelectedProduct(product)}
+                  className="object-cover group-hover:scale-105 transition duration-300"
                 />
+                
+                {/* Wishlist Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToWishlist(product);
+                  }}
+                  disabled={addingToWishlist === product.id}
+                  className={`absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors ${
+                    isInWishlist(product.id) ? 'text-red-500' : 'text-gray-600'
+                  }`}
+                >
+                  {addingToWishlist === product.id ? (
+                    <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+                  ) : isInWishlist(product.id) ? (
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  )}
+                </button>
+
                 {!product.inStock && (
                   <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-sm">
                     Out of Stock
                   </div>
                 )}
-                <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
-                  {product.images.length} images
+                <div className="absolute top-12 left-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
+                  {product.images.length} views
                 </div>
+
+                {/* Quick Add to Cart Button */}
+                <button
+                  onClick={(e) => handleQuickAddToCart(product, e)}
+                  disabled={!product.inStock || addingToCart === product.id}
+                  className={`absolute bottom-2 right-2 px-3 py-2 rounded-lg font-medium transition-colors ${
+                    !product.inStock
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-black text-white hover:bg-gray-800"
+                  }`}
+                >
+                  {addingToCart === product.id ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  )}
+                </button>
               </div>
 
               {/* Product Info */}
@@ -477,22 +686,51 @@ export default function KurtaAndSetsPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-2 mb-3">
-                  {product.colors.slice(0, 3).map((color, index) => (
-                    <div
-                      key={index}
-                      className="w-4 h-4 rounded-full border border-gray-300"
-                      style={{ backgroundColor: color.value }}
-                      title={color.name}
-                    />
-                  ))}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex gap-1">
+                    {product.colors.slice(0, 3).map((color, index) => (
+                      <div
+                        key={index}
+                        className="w-4 h-4 rounded-full border border-gray-300"
+                        style={{ backgroundColor: color.value }}
+                        title={color.name}
+                      />
+                    ))}
+                    {product.colors.length > 3 && (
+                      <div className="text-xs text-gray-500">+{product.colors.length - 3} more</div>
+                    )}
+                  </div>
+                  <span className={`text-xs font-medium ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
+                    {product.inStock ? 'In stock' : 'Out of stock'}
+                  </span>
                 </div>
 
+                {/* Single Add to Cart Button */}
                 <button
-                  onClick={() => setSelectedProduct(product)}
-                  className="w-full bg-gray-900 text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleQuickAddToCart(product, e);
+                  }}
+                  disabled={!product.inStock || addingToCart === product.id}
+                  className={`w-full py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                    !product.inStock
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-black text-white hover:bg-gray-800"
+                  }`}
                 >
-                  View Details
+                  {addingToCart === product.id ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                      Add to Cart
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -503,13 +741,16 @@ export default function KurtaAndSetsPage() {
       {/* Product Detail Modal */}
       {selectedProduct && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               {/* Header */}
               <div className="flex justify-between items-start mb-6">
                 <h2 className="text-2xl font-light">{selectedProduct.title}</h2>
                 <button
-                  onClick={() => setSelectedProduct(null)}
+                  onClick={() => {
+                    setSelectedProduct(null);
+                    setSelectedImageIndex(0);
+                  }}
                   className="text-gray-500 hover:text-gray-700"
                 >
                   ✕
@@ -517,25 +758,47 @@ export default function KurtaAndSetsPage() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Images */}
+                {/* Images with 4-angle view */}
                 <div>
-                  <div className="grid grid-cols-2 gap-2 mb-4">
+                  {/* Main Image */}
+                  <div 
+                    className="relative h-80 bg-gray-100 rounded-lg mb-4 cursor-zoom-in"
+                    onClick={() => handleImageClick(selectedProduct.images[selectedImageIndex])}
+                  >
+                    <Image
+                      src={selectedProduct.images[selectedImageIndex]}
+                      alt={`${selectedProduct.title} - View ${selectedImageIndex + 1}`}
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                    {!selectedProduct.inStock && (
+                      <div className="absolute top-2 left-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        Sold Out
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Thumbnail Gallery */}
+                  <div className="grid grid-cols-4 gap-2">
                     {selectedProduct.images.map((image, index) => (
-                      <div
+                      <button
                         key={index}
-                        className="relative h-40 cursor-pointer"
-                        onClick={() => handleImageClick(image)}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={`aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
+                          selectedImageIndex === index ? "border-black" : "border-transparent"
+                        }`}
                       >
                         <Image
                           src={image}
-                          alt={`${selectedProduct.title} ${index + 1}`}
-                          fill
-                          className="object-cover rounded-lg"
+                          alt={`${selectedProduct.title} - View ${index + 1}`}
+                          width={100}
+                          height={100}
+                          className="w-full h-full object-cover"
                         />
-                      </div>
+                      </button>
                     ))}
                   </div>
-                  <p className="text-sm text-gray-600">Click on images to zoom</p>
+                  <p className="text-sm text-gray-600 mt-2">Click on images to zoom</p>
                 </div>
 
                 {/* Product Details */}
@@ -549,6 +812,11 @@ export default function KurtaAndSetsPage() {
                     <span className="text-green-600 font-medium">
                       {Math.round((1 - selectedProduct.price / selectedProduct.originalPrice) * 100)}% OFF
                     </span>
+                  </div>
+
+                  {/* Stock Status */}
+                  <div className={`text-sm font-medium mb-4 ${selectedProduct.inStock ? 'text-green-600' : 'text-red-600'}`}>
+                    {selectedProduct.inStock ? 'In stock' : 'Out of Stock'}
                   </div>
 
                   {/* Colors */}
@@ -576,9 +844,9 @@ export default function KurtaAndSetsPage() {
                       {selectedProduct.sizes.map((size) => (
                         <button
                           key={size}
-                          className={`px-4 py-2 border rounded-lg ${
+                          className={`px-4 py-2 border rounded-lg font-medium transition-all ${
                             selectedSize === size
-                              ? "border-gray-900 bg-gray-900 text-white"
+                              ? "border-black bg-black text-white"
                               : "border-gray-300 hover:border-gray-400"
                           }`}
                           onClick={() => setSelectedSize(size)}
@@ -597,13 +865,56 @@ export default function KurtaAndSetsPage() {
                     <div><strong>Delivery:</strong> {selectedProduct.delivery}</div>
                   </div>
 
-                  {/* Order Button */}
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 mb-3">
+                    <button
+                      onClick={() => addToCart(selectedProduct, selectedSize, selectedColor)}
+                      disabled={!selectedProduct.inStock || addingToCart === selectedProduct.id}
+                      className="flex-1 bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                    >
+                      {addingToCart === selectedProduct.id ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Adding...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                          </svg>
+                          Add to Cart
+                        </>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => addToWishlist(selectedProduct)}
+                      disabled={addingToWishlist === selectedProduct.id}
+                      className={`px-4 border border-gray-300 rounded-lg font-medium hover:border-red-500 disabled:opacity-50 transition-colors flex items-center justify-center ${
+                        isInWishlist(selectedProduct.id) 
+                          ? 'bg-red-50 border-red-300 text-red-600 hover:bg-red-100' 
+                          : 'text-gray-700 hover:text-red-600'
+                      }`}
+                    >
+                      {addingToWishlist === selectedProduct.id ? (
+                        <div className="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+                      ) : isInWishlist(selectedProduct.id) ? (
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+
                   <button
                     onClick={() => handleOrder(selectedProduct)}
                     disabled={!selectedProduct.inStock}
                     className={`w-full py-3 rounded-lg font-medium ${
                       selectedProduct.inStock
-                        ? "bg-gray-900 text-white hover:bg-gray-800"
+                        ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     } transition-colors`}
                   >

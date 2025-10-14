@@ -1,11 +1,10 @@
-import { use } from "react";
+// app/product/[slug]/page.tsx
 import ProductClientPage from "./ProductClientPage";
 
-interface ProductPageServerProps {
-  params: Promise<{ slug: string }>;
-}
+type ProductPageProps = {
+  params: { slug: string };
+};
 
-export default function ProductPage({ params }: ProductPageServerProps) {
-  const { slug } = use(params); 
-  return <ProductClientPage slug={slug} />; 
+export default function ProductPage({ params }: ProductPageProps) {
+  return <ProductClientPage slug={params.slug} />;
 }

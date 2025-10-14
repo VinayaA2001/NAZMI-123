@@ -1,31 +1,29 @@
-﻿// app/western/bottomwears/page.tsx
+﻿// app/traditional/festive-edits/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 interface Product {
   id: number;
-  name: string;
+  images: string[];
+  title: string;
   description: string;
   price: number;
-  originalPrice?: number;
-  image: string;
-  images?: string[];
+  originalPrice: number;
   sizes: string[];
   colors: { name: string; value: string }[];
-  category: string;
-  featured: boolean;
-  stock: number;
-  fabric?: string;
-  occasion?: string;
-  delivery?: string;
+  fabric: string;
+  occasion: string;
+  care: string;
+  delivery: string;
+  inStock: boolean;
   productCode?: string;
-  care?: string;
+  stock?: number; // optional stock count
 }
 
-export default function BottomwearsPage() {
+export default function FestiveEditsPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -34,280 +32,270 @@ export default function BottomwearsPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [addingToCart, setAddingToCart] = useState<number | null>(null);
   const [addingToWishlist, setAddingToWishlist] = useState<number | null>(null);
+  const [wishlistItems, setWishlistItems] = useState<Set<number>>(new Set());
 
-  const bottomwearsProducts: Product[] = [
+  // PRODUCTS — keep these aligned to the Product interface above
+  const products: Product[] = [
     {
-      id: 1,
-      name: "Classic Blue Jeans",
-      description: "Comfortable classic blue jeans with perfect fit for everyday wear. Made with premium denim fabric that offers both comfort and style.",
-      price: 1499,
-      originalPrice: 1999,
-      image: "/images/jeans-1.jpg",
-      images: [
-        "/images/jeans-1.jpg",
-        "/images/jeans-2.jpg", 
-        "/images/jeans-3.jpg",
-        "/images/jeans-4.jpg"
-      ],
-      sizes: ["28", "30", "32", "34", "36"],
-      colors: [
-        { name: "Light Blue", value: "#93c5fd" },
-        { name: "Medium Blue", value: "#3b82f6" },
-        { name: "Dark Blue", value: "#1e40af" }
-      ],
-      category: "bottomwears",
-      featured: true,
-      stock: 15,
-      fabric: "100% Cotton Denim",
-      occasion: "Casual, Everyday",
-      delivery: "2-3 days",
-      productCode: "BOT-JN-001",
-      care: "Machine Wash"
-    },
+  id: 1,
+  productCode: "3108",
+  images: [
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377553/ash_pink5_qbfagi.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377548/ash_pink4_q99qjp.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377538/ash_pink2_bttpls.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377535/ash_pink1_cggyaq.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377543/ash_pink3_olebah.jpg",
+  ],
+  title: "Premium 3 Piece Churidar Set",
+  description: "Premium three-piece silk churidar set in ash pink.",
+  price: 3700,
+  originalPrice: 3700,
+  sizes: ["XXL"],
+  colors: [
+    { name: "Ash", value: "#B2BEB5" },
+    { name: "Pink", value: "#ec4899" }
+  ],
+  fabric: "Silk",
+  occasion: "Casual, Festive",
+  care: "Dry Clean Only",
+  delivery: "2-3 days",
+  inStock: true,
+  stock: 2,
+},
     {
-      id: 2,
-      name: "Designer Palazzos",
-      description: "Flowy palazzo pants with comfortable waistband and elegant drape. Perfect for both casual and party wear.",
-      price: 1299,
-      originalPrice: 1699,
-      image: "/images/palazzo-1.jpg",
-      images: [
-        "/images/palazzo-1.jpg",
-        "/images/palazzo-2.jpg",
-        "/images/palazzo-3.jpg",
-        "/images/palazzo-4.jpg"
-      ],
-      sizes: ["S", "M", "L", "XL"],
-      colors: [
-        { name: "Black", value: "#000000" },
-        { name: "Navy", value: "#1e3a8a" },
-        { name: "Burgundy", value: "#9d174d" },
-        { name: "White", value: "#ffffff" }
-      ],
-      category: "bottomwears",
-      featured: true,
-      stock: 8,
-      fabric: "Rayon Blend",
-      occasion: "Casual, Party",
-      delivery: "3-4 days",
-      productCode: "BOT-PL-002",
-      care: "Dry Clean Only"
-    },
+  id: 2,
+  productCode: "3252",
+  images: [
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760415680/pinkk4_dbraiq.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760415679/pinkk3_bbnzgo.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760415679/pinkk1_zlmz4u.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760415680/pinkk2_mjahmo.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760415679/pinkk5_s4fzuf.jpg",
+  ],
+  title: "Premium 3 Piece Salwar Set",
+  description: "Premium silk three-piece salwar set in pink.",
+  price: 3299,
+  originalPrice: 3299,
+  sizes: ["XXL"],
+  colors: [{ name: "Pink", value: "#ec4899" }],
+  fabric: "Silk",
+  occasion: "Casual, Festive",
+  care: "Dry Clean Only",
+  delivery: "2-3 days",
+  inStock: true,
+  stock: 1,
+},
     {
-      id: 3,
-      name: "A-Line Skirt",
-      description: "Flattering A-line skirt perfect for office and casual outings. Features comfortable waistband and perfect length.",
-      price: 1099,
-      originalPrice: 1499,
-      image: "/images/skirt-1.jpg",
-      images: [
-        "/images/skirt-1.jpg",
-        "/images/skirt-2.jpg",
-        "/images/skirt-3.jpg",
-        "/images/skirt-4.jpg"
-      ],
-      sizes: ["XS", "S", "M", "L"],
-      colors: [
-        { name: "Black", value: "#000000" },
-        { name: "Grey", value: "#6b7280" },
-        { name: "Navy", value: "#1e3a8a" },
-        { name: "Brown", value: "#92400e" }
-      ],
-      category: "bottomwears",
-      featured: false,
-      stock: 12,
-      fabric: "Polyester Blend",
-      occasion: "Office, Casual",
-      delivery: "2-3 days",
-      productCode: "BOT-SK-003",
-      care: "Machine Wash Cold"
-    },
+  id: 3,
+  productCode: "3042",
+  images: [
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377761/yellw2_xifsez.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377779/yellw3_znutuf.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377755/yellw1_g3bkfl.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377785/yellw4_owxbrr.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377792/yellw5_udlf7f.jpg",
+  ],
+  title: "3 Piece Salwar Set",
+  description: "Three-piece salwar set in yellow.",
+  price: 3150,
+  originalPrice: 3150,
+  sizes: ["XXL"],
+  colors: [{ name: "Yellow", value: "#eab308" }],
+  fabric: "Not specified",
+  occasion: "Casual, Festive",
+  care: "Dry Clean Recommended",
+  delivery: "2-3 days",
+  inStock: true,
+  stock: 1,
+},
     {
-      id: 4,
-      name: "Wide-Leg Trousers",
-      description: "Comfortable wide-leg trousers with professional finish. Perfect for office wear and formal occasions.",
-      price: 1599,
-      originalPrice: 2199,
-      image: "/images/trousers-1.jpg",
-      images: [
-        "/images/trousers-1.jpg",
-        "/images/trousers-2.jpg",
-        "/images/trousers-3.jpg",
-        "/images/trousers-4.jpg"
-      ],
-      sizes: ["S", "M", "L", "XL"],
-      colors: [
-        { name: "Black", value: "#000000" },
-        { name: "Beige", value: "#d6d3d1" },
-        { name: "Navy", value: "#1e3a8a" },
-        { name: "Grey", value: "#6b7280" }
-      ],
-      category: "bottomwears",
-      featured: true,
-      stock: 10,
-      fabric: "Cotton Blend",
-      occasion: "Office, Formal",
-      delivery: "3-4 days",
-      productCode: "BOT-TR-004",
-      care: "Machine Wash"
-    },
+  id: 4,
+  productCode: "2920",
+  images: [
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377609/green1_j51fqj.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377615/green2_deje92.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377620/green3_min09x.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377626/green4_g3gqwl.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760377631/green5_qbkvva.jpg",
+  ],
+  title: "3 Piece Salwar Set",
+  description: "Three-piece salwar set in green.",
+  price: 3150,
+  originalPrice: 3150,
+  sizes: ["XXL"],
+  colors: [{ name: "Green", value: "#059669" }],
+  fabric: "Not specified",
+  occasion: "Casual, Festive",
+  care: "Dry Clean Recommended",
+  delivery: "2-3 days",
+  inStock: true,
+  stock: 1,
+},
     {
-      id: 5,
-      name: "Denim Shorts",
-      description: "Comfortable denim shorts perfect for summer and casual wear. Features trendy cuts and comfortable fit.",
-      price: 899,
-      originalPrice: 1299,
-      image: "/images/shorts-1.jpg",
-      images: [
-        "/images/shorts-1.jpg",
-        "/images/shorts-2.jpg",
-        "/images/shorts-3.jpg",
-        "/images/shorts-4.jpg"
-      ],
-      sizes: ["26", "28", "30", "32"],
-      colors: [
-        { name: "Light Blue", value: "#93c5fd" },
-        { name: "Medium Blue", value: "#3b82f6" },
-        { name: "Black", value: "#000000" }
-      ],
-      category: "bottomwears",
-      featured: false,
-      stock: 20,
-      fabric: "Cotton Denim",
-      occasion: "Casual, Summer",
-      delivery: "2-3 days",
-      productCode: "BOT-SH-005",
-      care: "Machine Wash"
-    },
+  id: 5,
+  productCode: "3328",
+  images: [
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760016926/violet1_d5rrkh.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760016926/violet2_anivym.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760016925/violet3_kxdqbh.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760016925/violet4_n9js0r.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760016925/violet5_qkxg6g.jpg",
+  ],
+  title: "Premium 3 Piece Salwar Set",
+  description: "Premium crepe three-piece salwar set in rich tone.",
+  price: 4150,
+  originalPrice: 4150,
+  sizes: ["XXL"],
+  colors: [{ name: "Brown", value: "#8B4513" }],
+  fabric: "Crepe",
+  occasion: "Casual, Festive",
+  care: "Dry Clean Only",
+  delivery: "2-3 days",
+  inStock: true,
+  stock: 1,
+},
     {
-      id: 6,
-      name: "Tailored Pants",
-      description: "Professional tailored pants with perfect fit and premium finish. Ideal for office and business occasions.",
-      price: 1799,
-      originalPrice: 2399,
-      image: "/images/pants-1.jpg",
-      images: [
-        "/images/pants-1.jpg",
-        "/images/pants-2.jpg",
-        "/images/pants-3.jpg",
-        "/images/pants-4.jpg"
-      ],
-      sizes: ["28", "30", "32", "34", "36"],
-      colors: [
-        { name: "Charcoal", value: "#374151" },
-        { name: "Navy", value: "#1e3a8a" },
-        { name: "Black", value: "#000000" }
-      ],
-      category: "bottomwears",
-      featured: true,
-      stock: 7,
-      fabric: "Wool Blend",
-      occasion: "Office, Formal",
-      delivery: "4-5 days",
-      productCode: "BOT-PT-006",
-      care: "Dry Clean Only"
-    }
+  id: 6,
+  productCode: "3335",
+  images: [
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760416641/pgreen_dv4hps.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760416641/pgreen1_rxesg5.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760416642/pgreen2_cvm4ua.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760416647/pgreen3_rveggo.jpg",
+    "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1760416648/pgreen4_i6z0mj.jpg",
+  ],
+  title: "Parrot Green Churidar Set",
+  description: "Vibrant parrot green churidar set with a comfortable, everyday fit.",
+  price: 2499,
+  originalPrice: 2499,
+  sizes: ["L", "XL"],
+  colors: [{ name: "Parrot Green", value: "#32CD32" }],
+  fabric: "Churidar",
+  occasion: "Traditional, Daily Wear",
+  care: "Machine Wash",
+  delivery: "2-3 days",
+  inStock: true,
+  stock: 1,
+},
   ];
 
-  // Function to create slug from product name
-  const createSlug = (name: string) => {
-    return name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
-  };
+  // stateful list so we can modify later if needed
+  const [productList, setProductList] = useState<Product[]>(products);
 
-  // Add to Cart Function
+  // Load wishlist from localStorage
+  useEffect(() => {
+    try {
+      const savedWishlist = localStorage.getItem("wishlist");
+      if (savedWishlist) {
+        const parsed = JSON.parse(savedWishlist);
+        if (Array.isArray(parsed)) {
+          const ids = new Set(parsed.map((i: any) => i.id));
+          setWishlistItems(ids);
+        }
+      }
+    } catch (e) {
+      console.error("Error loading wishlist from localStorage:", e);
+      setWishlistItems(new Set());
+    }
+  }, []);
+
+  // Merge any saved per-product images (if you ever add uploading again)
+  useEffect(() => {
+    setProductList(prev =>
+      prev.map(p => {
+        const saved = localStorage.getItem(`prod-images-${p.id}`);
+        if (saved) {
+          try {
+            const arr = JSON.parse(saved);
+            if (Array.isArray(arr) && arr.length) {
+              return { ...p, images: arr.slice(0, 5) };
+            }
+          } catch {}
+        }
+        return p;
+      })
+    );
+  }, []);
+
+  // Add to Cart
   const addToCart = async (product: Product, size: string = "", color: string = "") => {
     setAddingToCart(product.id);
-    
     try {
-      const selectedSize = size || (product.sizes.length > 0 ? product.sizes[0] : "");
-      const selectedColor = color || (product.colors.length > 0 ? product.colors[0].name : "");
-      
+      const s = size || (product.sizes.length > 0 ? product.sizes[0] : "");
+      const c = color || (product.colors.length > 0 ? product.colors[0].name : "");
+
       const cartItem = {
-        id: `${product.id}-${selectedSize}-${selectedColor}`,
+        id: `${product.id}-${s}-${c}`,
         productId: product.id,
-        name: product.name,
+        name: product.title,
         price: product.price,
-        image: product.image,
+        image: product.images[0],
         quantity: 1,
-        size: selectedSize,
-        color: selectedColor,
-        productCode: product.productCode
+        size: s,
+        color: c,
       };
 
-      // Get existing cart from localStorage
-      const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const existingItemIndex = existingCart.findIndex(
-        (item: any) => item.id === cartItem.id
-      );
-
-      let updatedCart;
-      if (existingItemIndex > -1) {
-        // Update quantity if item exists
-        updatedCart = existingCart.map((item: any, index: number) =>
-          index === existingItemIndex
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        // Add new item
-        updatedCart = [...existingCart, cartItem];
+      let existing: any[] = [];
+      try {
+        const data = localStorage.getItem("cart");
+        if (data) existing = JSON.parse(data);
+      } catch {
+        existing = [];
       }
 
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      
-      // Dispatch event for header update
-      window.dispatchEvent(new Event('cartUpdated'));
-      
-      // Show success message
-      alert(`${product.name} added to cart successfully!`);
-      
+      const idx = existing.findIndex((item: any) => item.id === cartItem.id);
+      const updated =
+        idx > -1
+          ? existing.map((item: any, i: number) => (i === idx ? { ...item, quantity: item.quantity + 1 } : item))
+          : [...existing, cartItem];
+
+      localStorage.setItem("cart", JSON.stringify(updated));
+      window.dispatchEvent(new Event("cartUpdated"));
     } catch (error) {
       console.error("Error adding to cart:", error);
-      alert("Failed to add product to cart");
     } finally {
       setAddingToCart(null);
     }
   };
 
-  // Add to Wishlist Function
+  // Wishlist
   const addToWishlist = async (product: Product) => {
     setAddingToWishlist(product.id);
-    
     try {
-      const wishlistItem = {
+      const item = {
         id: product.id,
         productId: product.id,
-        name: product.name,
+        name: product.title,
         price: product.price,
-        image: product.image,
-        productCode: product.productCode
+        image: product.images[0],
       };
 
-      // Get existing wishlist from localStorage
-      const existingWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-      const existingItemIndex = existingWishlist.findIndex(
-        (item: any) => item.id === wishlistItem.id
-      );
-
-      let updatedWishlist;
-      if (existingItemIndex > -1) {
-        // Remove if already in wishlist
-        updatedWishlist = existingWishlist.filter((item: any) => item.id !== wishlistItem.id);
-        alert(`${product.name} removed from wishlist`);
-      } else {
-        // Add to wishlist
-        updatedWishlist = [...existingWishlist, wishlistItem];
-        alert(`${product.name} added to wishlist!`);
+      let existing: any[] = [];
+      try {
+        const data = localStorage.getItem("wishlist");
+        if (data) existing = JSON.parse(data);
+      } catch {
+        existing = [];
       }
 
-      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-      
-      // Dispatch event for header update
-      window.dispatchEvent(new Event('wishlistUpdated'));
-      
+      const idx = existing.findIndex((i: any) => i.id === item.id);
+      let updated;
+      if (idx > -1) {
+        updated = existing.filter((i: any) => i.id !== item.id);
+        setWishlistItems(prev => {
+          const n = new Set(prev);
+          n.delete(product.id);
+          return n;
+        });
+      } else {
+        updated = [...existing, item];
+        setWishlistItems(prev => new Set(prev).add(product.id));
+      }
+
+      localStorage.setItem("wishlist", JSON.stringify(updated));
+      window.dispatchEvent(new Event("wishlistUpdated"));
     } catch (error) {
       console.error("Error updating wishlist:", error);
-      alert("Failed to update wishlist");
     } finally {
       setAddingToWishlist(null);
     }
@@ -321,21 +309,27 @@ export default function BottomwearsPage() {
     setShowLoginModal(true);
   };
 
-  const handleImageClick = (image: string) => {
-    setZoomImage(image);
-  };
+  const handleImageClick = (image: string) => setZoomImage(image);
 
-  const handleQuickAddToCart = (product: Product) => {
+  const handleQuickAddToCart = (product: Product, e: React.MouseEvent) => {
+    e.stopPropagation();
     if (product.sizes.length === 1 && product.colors.length === 1) {
-      // If only one size and color, add directly to cart
       addToCart(product, product.sizes[0], product.colors[0].name);
     } else {
-      // If multiple options, open quick view
       setSelectedProduct(product);
       setSelectedSize(product.sizes[0] || "");
       setSelectedColor(product.colors[0]?.name || "");
     }
   };
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setSelectedSize(product.sizes[0] || "");
+    setSelectedColor(product.colors[0]?.name || "");
+    setSelectedImageIndex(0);
+  };
+
+  const isInWishlist = (productId: number) => wishlistItems.has(productId);
 
   return (
     <div className="min-h-screen bg-white">
@@ -343,11 +337,11 @@ export default function BottomwearsPage() {
       <div className="bg-white border-b py-4">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
-            <Link href="/western" className="text-gray-600 hover:text-gray-900">
-              ← Back to Western
+            <Link href="/traditional" className="text-gray-600 hover:text-gray-900">
+              ← Back to Traditional
             </Link>
-            <h1 className="text-2xl font-light">Bottomwears</h1>
-            <div className="w-8"></div>
+            <h1 className="text-2xl font-light">Festive Edits</h1>
+            <div className="w-8" />
           </div>
         </div>
       </div>
@@ -355,18 +349,21 @@ export default function BottomwearsPage() {
       {/* Products Grid */}
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {bottomwearsProducts.map((product) => (
-            <div key={product.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-400 transition-colors group">
+          {productList.map((product) => (
+            <div
+              key={product.id}
+              className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-400 transition-colors group cursor-pointer"
+              onClick={() => handleProductClick(product)}
+            >
               {/* Product Image */}
               <div className="relative h-80 overflow-hidden">
                 <Image
-                  src={product.image}
-                  alt={product.name}
+                  src={product.images[0]}
+                  alt={product.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition duration-300 cursor-pointer"
-                  onClick={() => setSelectedProduct(product)}
+                  className="object-cover group-hover:scale-105 transition duration-300"
                 />
-                
+
                 {/* Wishlist Button */}
                 <button
                   onClick={(e) => {
@@ -374,39 +371,38 @@ export default function BottomwearsPage() {
                     addToWishlist(product);
                   }}
                   disabled={addingToWishlist === product.id}
-                  className="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors"
+                  className={`absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors ${
+                    isInWishlist(product.id) ? "text-red-500" : "text-gray-600"
+                  }`}
                 >
                   {addingToWishlist === product.id ? (
-                    <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+                  ) : isInWishlist(product.id) ? (
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
                   ) : (
-                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                   )}
                 </button>
 
-                {product.stock === 0 && (
+                {!product.inStock && (
                   <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-sm">
                     Out of Stock
                   </div>
                 )}
-                {product.featured && (
-                  <div className="absolute top-12 left-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
-                    Featured
-                  </div>
-                )}
+                <div className="absolute top-12 left-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
+                  {product.images.length} views
+                </div>
 
-                {/* Quick Add to Cart Button */}
+                {/* Quick Add */}
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleQuickAddToCart(product);
-                  }}
-                  disabled={product.stock === 0 || addingToCart === product.id}
+                  onClick={(e) => handleQuickAddToCart(product, e)}
+                  disabled={!product.inStock || addingToCart === product.id}
                   className={`absolute bottom-2 right-2 px-3 py-2 rounded-lg font-medium transition-colors ${
-                    product.stock === 0
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-black text-white hover:bg-gray-800"
+                    !product.inStock ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-black text-white hover:bg-gray-800"
                   }`}
                 >
                   {addingToCart === product.id ? (
@@ -421,20 +417,16 @@ export default function BottomwearsPage() {
 
               {/* Product Info */}
               <div className="p-4">
-                <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">{product.name}</h3>
+                <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">{product.title}</h3>
                 <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
-                
+
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-lg font-semibold text-gray-900">₹{product.price}</span>
-                    {product.originalPrice && (
-                      <span className="text-sm text-gray-500 line-through">₹{product.originalPrice}</span>
-                    )}
-                    {product.originalPrice && (
-                      <span className="text-sm text-green-600 font-medium">
-                        {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
-                      </span>
-                    )}
+                    <span className="text-sm text-gray-500 line-through">₹{product.originalPrice}</span>
+                    <span className="text-sm text-green-600 font-medium">
+                      {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+                    </span>
                   </div>
                 </div>
 
@@ -452,25 +444,35 @@ export default function BottomwearsPage() {
                       <div className="text-xs text-gray-500">+{product.colors.length - 3} more</div>
                     )}
                   </div>
-                  <span className={`text-xs font-medium ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                  <span className={`text-xs font-medium ${product.inStock ? "text-green-600" : "text-red-600"}`}>
+                    {product.inStock ? "In stock" : "Out of stock"}
                   </span>
                 </div>
 
-                <div className="flex gap-2">
-                  <Link
-                    href={`/product/${createSlug(product.name)}`}
-                    className="flex-1 bg-gray-900 text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
-                  >
-                    View Details
-                  </Link>
-                  <button
-                    onClick={() => setSelectedProduct(product)}
-                    className="px-4 border border-gray-300 text-gray-700 rounded-lg font-medium hover:border-gray-400 transition-colors"
-                  >
-                    Quick View
-                  </button>
-                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleQuickAddToCart(product, e);
+                  }}
+                  disabled={!product.inStock || addingToCart === product.id}
+                  className={`w-full py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                    !product.inStock ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-black text-white hover:bg-gray-800"
+                  }`}
+                >
+                  {addingToCart === product.id ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m-6-6h12" />
+                      </svg>
+                      Add to Cart
+                    </>
+                  )}
+                </button>
               </div>
             </div>
           ))}
@@ -484,12 +486,7 @@ export default function BottomwearsPage() {
             <div className="p-6">
               {/* Header */}
               <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h2 className="text-2xl font-light">{selectedProduct.name}</h2>
-                  {selectedProduct.productCode && (
-                    <p className="text-sm text-gray-500">Product Code: {selectedProduct.productCode}</p>
-                  )}
-                </div>
+                <h2 className="text-2xl font-light">{selectedProduct.title}</h2>
                 <button
                   onClick={() => {
                     setSelectedProduct(null);
@@ -502,29 +499,29 @@ export default function BottomwearsPage() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Images with 4-angle view */}
+                {/* Images */}
                 <div>
                   {/* Main Image */}
-                  <div 
+                  <div
                     className="relative h-80 bg-gray-100 rounded-lg mb-4 cursor-zoom-in"
-                    onClick={() => handleImageClick(selectedProduct.images?.[selectedImageIndex] || selectedProduct.image)}
+                    onClick={() => handleImageClick(selectedProduct.images[selectedImageIndex])}
                   >
                     <Image
-                      src={selectedProduct.images?.[selectedImageIndex] || selectedProduct.image}
-                      alt={`${selectedProduct.name} - View ${selectedImageIndex + 1}`}
+                      src={selectedProduct.images[selectedImageIndex]}
+                      alt={`${selectedProduct.title} - View ${selectedImageIndex + 1}`}
                       fill
                       className="object-cover rounded-lg"
                     />
-                    {selectedProduct.stock === 0 && (
+                    {!selectedProduct.inStock && (
                       <div className="absolute top-2 left-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                         Sold Out
                       </div>
                     )}
                   </div>
-                  
-                  {/* Thumbnail Gallery */}
-                  <div className="grid grid-cols-4 gap-2">
-                    {(selectedProduct.images || [selectedProduct.image]).map((image, index) => (
+
+                  {/* Thumbnails */}
+                  <div className={`grid ${selectedProduct.images.length >= 5 ? "grid-cols-5" : "grid-cols-4"} gap-2`}>
+                    {selectedProduct.images.slice(0, 5).map((image, index) => (
                       <button
                         key={index}
                         onClick={() => setSelectedImageIndex(index)}
@@ -534,7 +531,7 @@ export default function BottomwearsPage() {
                       >
                         <Image
                           src={image}
-                          alt={`${selectedProduct.name} - View ${index + 1}`}
+                          alt={`${selectedProduct.title} - View ${index + 1}`}
                           width={100}
                           height={100}
                           className="w-full h-full object-cover"
@@ -552,19 +549,18 @@ export default function BottomwearsPage() {
                   {/* Price */}
                   <div className="flex items-center gap-3 mb-4">
                     <span className="text-2xl font-semibold text-gray-900">₹{selectedProduct.price}</span>
-                    {selectedProduct.originalPrice && (
-                      <span className="text-lg text-gray-500 line-through">₹{selectedProduct.originalPrice}</span>
-                    )}
-                    {selectedProduct.originalPrice && (
-                      <span className="text-green-600 font-medium">
-                        {Math.round((1 - selectedProduct.price / selectedProduct.originalPrice) * 100)}% OFF
-                      </span>
-                    )}
+                    <span className="text-lg text-gray-500 line-through">₹{selectedProduct.originalPrice}</span>
+                    <span className="text-green-600 font-medium">
+                      {Math.round((1 - selectedProduct.price / selectedProduct.originalPrice) * 100)}% OFF
+                    </span>
                   </div>
 
-                  {/* Stock Status */}
-                  <div className={`text-sm font-medium mb-4 ${selectedProduct.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {selectedProduct.stock > 0 ? `${selectedProduct.stock} items in stock` : 'Out of Stock'}
+                  {/* Stock */}
+                  <div className={`text-sm font-medium mb-4 ${selectedProduct.inStock ? "text-green-600" : "text-red-600"}`}>
+                    {selectedProduct.inStock ? "In stock" : "Out of Stock"}
+                    {typeof selectedProduct.stock === "number" && (
+                      <span className="ml-2 text-gray-500">(Qty: {selectedProduct.stock})</span>
+                    )}
                   </div>
 
                   {/* Colors */}
@@ -593,9 +589,7 @@ export default function BottomwearsPage() {
                         <button
                           key={size}
                           className={`px-4 py-2 border rounded-lg font-medium transition-all ${
-                            selectedSize === size
-                              ? "border-black bg-black text-white"
-                              : "border-gray-300 hover:border-gray-400"
+                            selectedSize === size ? "border-black bg-black text-white" : "border-gray-300 hover:border-gray-400"
                           }`}
                           onClick={() => setSelectedSize(size)}
                         >
@@ -605,27 +599,27 @@ export default function BottomwearsPage() {
                     </div>
                   </div>
 
-                  {/* Product Info */}
+                  {/* Info */}
                   <div className="space-y-2 text-sm text-gray-600 mb-6">
-                    {selectedProduct.fabric && (
-                      <div><strong>Fabric:</strong> {selectedProduct.fabric}</div>
-                    )}
-                    {selectedProduct.occasion && (
-                      <div><strong>Occasion:</strong> {selectedProduct.occasion}</div>
-                    )}
-                    {selectedProduct.care && (
-                      <div><strong>Care:</strong> {selectedProduct.care}</div>
-                    )}
-                    {selectedProduct.delivery && (
-                      <div><strong>Delivery:</strong> {selectedProduct.delivery}</div>
-                    )}
+                    <div>
+                      <strong>Fabric:</strong> {selectedProduct.fabric}
+                    </div>
+                    <div>
+                      <strong>Occasion:</strong> {selectedProduct.occasion}
+                    </div>
+                    <div>
+                      <strong>Care:</strong> {selectedProduct.care}
+                    </div>
+                    <div>
+                      <strong>Delivery:</strong> {selectedProduct.delivery}
+                    </div>
                   </div>
 
-                  {/* Action Buttons */}
+                  {/* Actions */}
                   <div className="flex gap-3 mb-3">
                     <button
                       onClick={() => addToCart(selectedProduct, selectedSize, selectedColor)}
-                      disabled={selectedProduct.stock === 0 || addingToCart === selectedProduct.id}
+                      disabled={!selectedProduct.inStock || addingToCart === selectedProduct.id}
                       className="flex-1 bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                     >
                       {addingToCart === selectedProduct.id ? (
@@ -645,10 +639,18 @@ export default function BottomwearsPage() {
                     <button
                       onClick={() => addToWishlist(selectedProduct)}
                       disabled={addingToWishlist === selectedProduct.id}
-                      className="px-4 border border-gray-300 text-gray-700 rounded-lg font-medium hover:border-black hover:text-black disabled:opacity-50 transition-colors flex items-center justify-center"
+                      className={`px-4 border border-gray-300 rounded-lg font-medium hover:border-red-500 disabled:opacity-50 transition-colors flex items-center justify-center ${
+                        isInWishlist(selectedProduct.id)
+                          ? "bg-red-50 border-red-300 text-red-600 hover:bg-red-100"
+                          : "text-gray-700 hover:text-red-600"
+                      }`}
                     >
                       {addingToWishlist === selectedProduct.id ? (
-                        <div className="w-5 h-5 border-2 border-gray-600 border-t-transparent rounded-full animate-spin" />
+                        <div className="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+                      ) : isInWishlist(selectedProduct.id) ? (
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
                       ) : (
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -657,25 +659,17 @@ export default function BottomwearsPage() {
                     </button>
                   </div>
 
-                  <div className="flex gap-3">
-                    <Link
-                      href={`/product/${createSlug(selectedProduct.name)}`}
-                      className="flex-1 bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
-                    >
-                      View Full Details
-                    </Link>
-                    <button
-                      onClick={() => handleOrder(selectedProduct)}
-                      disabled={selectedProduct.stock === 0}
-                      className={`flex-1 py-3 rounded-lg font-medium ${
-                        selectedProduct.stock > 0
-                          ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      } transition-colors`}
-                    >
-                      {selectedProduct.stock > 0 ? "Order Now" : "Out of Stock"}
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleOrder(selectedProduct)}
+                    disabled={!selectedProduct.inStock}
+                    className={`w-full py-3 rounded-lg font-medium ${
+                      selectedProduct.inStock
+                        ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    } transition-colors`}
+                  >
+                    {selectedProduct.inStock ? "Order Now" : "Out of Stock"}
+                  </button>
                 </div>
               </div>
             </div>
@@ -687,17 +681,8 @@ export default function BottomwearsPage() {
       {zoomImage && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
           <div className="relative max-w-4xl max-h-full">
-            <Image
-              src={zoomImage}
-              alt="Zoomed product image"
-              width={800}
-              height={800}
-              className="object-contain max-h-[80vh]"
-            />
-            <button
-              onClick={() => setZoomImage("")}
-              className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300"
-            >
+            <Image src={zoomImage} alt="Zoomed product image" width={800} height={800} className="object-contain max-h-[80vh]" />
+            <button onClick={() => setZoomImage("")} className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300">
               ✕
             </button>
           </div>
@@ -710,9 +695,9 @@ export default function BottomwearsPage() {
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
             <h3 className="text-xl font-light mb-4">Sign In Required</h3>
             <p className="text-gray-600 mb-6">
-              Please sign in to place your order for <strong>{selectedProduct?.name}</strong>
+              Please sign in to place your order for <strong>{selectedProduct?.title}</strong>
             </p>
-            
+
             <div className="space-y-3">
               <button className="w-full bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
                 Sign In
