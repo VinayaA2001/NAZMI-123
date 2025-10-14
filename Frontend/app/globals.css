@@ -2,39 +2,214 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
+:root { 
+  color-scheme: light;
+  --color-primary: #8B4513;
+  --color-secondary: #D4AF37;
+  --color-accent: #F5F5DC;
+}
 
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
+* { 
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-/* Use Google Fonts (from next/font variables) */
+html, body { 
+  margin: 0; 
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+/* Enhanced Font System */
 body {
-  font-family: var(--font-poppins), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-poppins), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Typography Scale */
 h1, h2, h3, h4, h5, h6,
-.title-1, .title-2, .heading {
-  font-family: var(--font-playfair), serif;
+.font-serif {
+  font-family: var(--font-playfair), 'Times New Roman', serif;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
-/* Custom components (put @apply inside a Tailwind layer) */
+/* Enhanced Components */
 @layer components {
-  .btn { @apply inline-flex items-center justify-center rounded-full text-sm px-5 py-2 transition; }
-  .btn-primary { @apply bg-black text-white hover:opacity-90; }
-  .btn-ghost { @apply border border-neutral-300 hover:bg-neutral-50; }
+  /* Buttons */
+  .btn { 
+    @apply inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  
+  .btn-primary { 
+    @apply bg-gray-900 text-white hover:bg-gray-800 focus:ring-gray-900 px-6 py-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary { 
+    @apply bg-amber-900 text-white hover:bg-amber-800 focus:ring-amber-900 px-6 py-3 shadow-lg hover:shadow-xl;
+  }
+  
+  .btn-ghost { 
+    @apply border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 focus:ring-gray-300 px-5 py-2.5;
+  }
 
-  .card { @apply rounded-2xl border bg-white shadow-card; }
-  .title-1 { @apply text-3xl md:text-5xl font-semibold tracking-tight; }
-  .title-2 { @apply text-xl md:text-2xl font-semibold; }
-  .muted { @apply text-neutral-600; }
+  /* Cards */
+  .card { 
+    @apply bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden;
+  }
+  
+  .card-hover {
+    @apply transform hover:-translate-y-2 transition-all duration-300;
+  }
+
+  /* Typography */
+  .display-1 { 
+    @apply text-4xl md:text-6xl lg:text-7xl font-serif font-semibold tracking-tight;
+  }
+  
+  .display-2 { 
+    @apply text-3xl md:text-5xl lg:text-6xl font-serif font-semibold;
+  }
+  
+  .heading-1 { 
+    @apply text-2xl md:text-4xl font-serif font-semibold;
+  }
+  
+  .heading-2 { 
+    @apply text-xl md:text-3xl font-serif font-medium;
+  }
+  
+  .body-large { 
+    @apply text-lg text-gray-700 leading-relaxed;
+  }
+  
+  .body-base { 
+    @apply text-base text-gray-600 leading-relaxed;
+  }
+
+  /* Layout */
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-16 lg:py-24;
+  }
+  
+  .container-max {
+    @apply max-w-7xl mx-auto;
+  }
+
+  /* Gradients */
+  .gradient-primary {
+    @apply bg-gradient-to-br from-amber-50 via-white to-beige-50;
+  }
+  
+  .gradient-hero {
+    @apply bg-gradient-to-br from-amber-900/5 via-white to-amber-50;
+  }
 }
 
-/* Optional helper */
-.container { max-width: 1120px; }
-
-/* --- Slomo helpers --- */
-@keyframes kenburns {
-  0%   { transform: scale(1.05); }
-  100% { transform: scale(1.18); }
+/* Utility Classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .bg-beige-50 {
+    background-color: #FEFAF6;
+  }
+  
+  .shadow-soft {
+    box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.1);
+  }
 }
-.kenburns { animation: kenburns 18s ease-in-out infinite alternate; will-change: transform; }
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .mobile-container {
+    @apply px-4;
+  }
+  
+  .mobile-text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Focus States for Accessibility */
+button:focus-visible,
+a:focus-visible {
+  @apply outline-2 outline-offset-2 outline-amber-900;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1a07a;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a67c52;
+}
+/* Reset for hero sections only */
+[class*="hero"] h1,
+[class*="hero"] h2, 
+[class*="hero"] h3,
+[class*="hero"] h4,
+[class*="hero"] h5,
+[class*="hero"] h6,
+[class*="hero"] p {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+}
+
+/* Remove any default margins from typography classes in hero sections */
+[class*="hero"] .display-1,
+[class*="hero"] .display-2,
+[class*="hero"] .heading-1,
+[class*="hero"] .heading-2,
+[class*="hero"] .heading-3,
+[class*="hero"] .body-large,
+[class*="hero"] .body-base {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+}

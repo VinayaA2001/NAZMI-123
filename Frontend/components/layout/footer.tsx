@@ -106,7 +106,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-3 text-gray-400">
                 <Mail className="w-4 h-4 text-[#6D7E5F]" />
-                <span className="text-sm">hello@nazmi.com</span>
+                <span className="text-sm">nazmiboutique1@gmail.com</span>
               </div>
             </div>
 
@@ -155,7 +155,7 @@ export default function Footer() {
               <FooterLink href="/contact" label="Contact Us" />
               <FooterLink href="/shipping" label="Shipping Info" />
               <FooterLink href="/returns" label="Returns & Exchanges" />
-              <FooterLink href="/size-guide" label="Size Guide" />
+  
             </ul>
           </div>
 

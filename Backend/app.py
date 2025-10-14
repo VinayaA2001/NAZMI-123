@@ -5,14 +5,25 @@ import os
 import json
 from datetime import datetime
 from werkzeug.security import generate_password_hash
+import razorpay
+from flask_mail import Mail
+from config import Config
+
 
 app = Flask(__name__)
+
+from config import Config
+app.config.from_object(Config)
 CORS(app)
+mail = Mail(app)
+
+client = razorpay.Client(auth=(app.config['RAZORPAY_KEY_ID'], app.config['RAZORPAY_KEY_SECRET']))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///boutique.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'nazmi-boutique-secret-key-2024'
 
 db = SQLAlchemy(app)
+
 
 # Define models with proper table names
 class Product(db.Model):

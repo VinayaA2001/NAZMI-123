@@ -1,0 +1,23 @@
+{
+  "name": "nazmi-ecommerce",
+  "version": "1.0.0",
+  "description": "E-commerce platform with Next.js frontend and Flask backend",
+  "scripts": {
+    "build": "cd Frontend && npm install && npm run build",
+    "start": "cd Backend && python app.py",
+    "dev": "concurrently \"cd Frontend && npm run dev\" \"cd Backend && python app.py\""
+  },
+  "keywords": [
+    "ecommerce",
+    "nextjs",
+    "flask"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "dependencies": {
+    "nodemailer": "^7.0.9"
+  }
+}
