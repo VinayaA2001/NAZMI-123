@@ -6,72 +6,38 @@ import Image from "next/image";
 
 export default function WesternPage() {
   const categories = [
-    {
-      href: "/western/bottomwears",
-      image: "/images/bottom.png",
-      title: "Bottomwears",
-      description: "Jeans, skirts & Palazzo pants"
-    },
-    {
-      href: "/western/officewear",
-      image: "/images/office2.png",
-      title: "Officewear",
-      description: "Stylish matching outfits"
-    },
-    {
-      href: "/western/tops",
-      image: "/images/tops.png", 
-      title: "Tops & Shirts",
-      description: "Trendy casual & formal tops"
-    }
+    { href: "/western/bottomwears", image: "/images/bottom.png",  title: "Bottomwears",  description: "Jeans, skirts & palazzos" },
+    { href: "/western/officewear",  image: "/images/office2.png", title: "Officewear",   description: "Polished looks for work" },
+    { href: "/western/tops",        image: "/images/tops.png",    title: "Tops & Shirts",description: "Trendy casual & formal tops" },
   ];
 
   const features = [
-    {
-      icon: "👖",
-      title: "Premium Fabrics",
-      description: "High-quality materials for comfort and style"
-    },
-    {
-      icon: "💼",
-      title: "Professional Look", 
-      description: "Perfect outfits for office and formal occasions"
-    },
-    {
-      icon: "🚚",
-      title: "Free Shipping",
-      description: "On orders above ₹1999"
-    },
-    {
-      icon: "↩️",
-      title: "Easy Returns",
-      description: "30-day return policy"
-    }
+    { icon: "👖", title: "Premium Fabrics",   description: "High-quality materials for comfort & style" },
+    { icon: "💼", title: "Professional Look", description: "Smart pieces for office & events" },
+    { icon: "🚚", title: "Free Shipping",     description: "On orders above ₹1999" },
+    { icon: "↩️", title: "Easy Returns",      description: "10-day return window" },
   ];
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="py-16 md:py-24 bg-white border-b">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
-              Western Collection
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
-              Discover contemporary western wear that blends modern style with 
-              everyday comfort. From office attire to casual outfits.
+      {/* Hero */}
+      <section className="border-b">
+        <div className="mx-auto max-w-6xl px-4 py-10 md:py-12">
+          <div className="text-center mx-auto max-w-3xl">
+            <h1 className="text-4xl md:text-5xl font-light text-gray-900">Western Collection</h1>
+            <p className="mt-3 text-base md:text-lg text-gray-600">
+              Contemporary styles for everyday comfort—from polished officewear to relaxed casuals.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
+            <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
                 href="#categories"
-                className="bg-gray-900 text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-300"
+                className="inline-flex items-center justify-center rounded-lg bg-neutral-900 px-6 py-3 text-white hover:bg-neutral-800 transition"
               >
                 Explore Collection
               </Link>
-              <Link 
+              <Link
                 href="/sale"
-                className="border border-gray-300 text-gray-700 px-8 py-4 rounded-lg font-medium hover:border-gray-400 transition-colors duration-300"
+                className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-6 py-3 text-gray-800 hover:border-neutral-900 hover:text-neutral-900 transition"
               >
                 New Arrivals
               </Link>
@@ -80,46 +46,40 @@ export default function WesternPage() {
         </div>
       </section>
 
-      {/* Categories Grid */}
-      <section id="categories" className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
-              Shop Western Wear
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Browse through our carefully curated western wear categories
-            </p>
-          </div>
+      {/* Categories */}
+      <section id="categories">
+        <div className="mx-auto max-w-6xl px-4 py-10 md:py-12">
+          <header className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-light text-gray-900">Shop Western Wear</h2>
+            <p className="mt-2 text-gray-600">Browse our carefully curated categories</p>
+          </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {categories.map((category, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {categories.map((c) => (
               <Link
-                key={index}
-                href={category.href}
-                className="group relative bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-gray-400 transition-all duration-300"
+                key={c.href}
+                href={c.href}
+                className="group relative rounded-lg overflow-hidden border border-gray-200 hover:border-neutral-900 transition"
               >
-                <div className="relative h-80 overflow-hidden">
+                <div className="relative h-72 overflow-hidden">
                   <Image
-                    src={category.image}
-                    alt={category.title}
+                    src={c.image}
+                    alt={c.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition duration-700"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition duration-500 group-hover:scale-105"
+                    sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
                   />
-                  
-                  <div className="absolute bottom-4 left-4 right-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center">
-                      <span className="text-gray-900 font-medium text-sm">Explore Now →</span>
+                  <div className="absolute bottom-4 left-4 right-4 translate-y-3 group-hover:translate-y-0 transition-transform">
+                    <div className="bg-white/90 backdrop-blur-sm rounded-md p-3 text-center">
+                      <span className="text-neutral-900 text-sm font-medium">Explore Now →</span>
                     </div>
                   </div>
                 </div>
-
-                <div className="p-6">
-                  <h3 className="text-xl font-medium text-gray-900 mb-2 group-hover:text-gray-700 transition-colors">
-                    {category.title}
+                <div className="p-5">
+                  <h3 className="text-lg font-medium text-gray-900 group-hover:text-neutral-900 transition">
+                    {c.title}
                   </h3>
-                  <p className="text-gray-600">{category.description}</p>
+                  <p className="mt-1 text-sm text-gray-600">{c.description}</p>
                 </div>
               </Link>
             ))}
@@ -127,124 +87,23 @@ export default function WesternPage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-light text-gray-900 mb-4">
-              Why Choose Our Western Collection?
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Modern fashion with quality and comfort
-            </p>
-          </div>
+      {/* Value Props */}
+      <section className="bg-gray-50">
+        <div className="mx-auto max-w-6xl px-4 py-10 md:py-12">
+          <header className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-light text-gray-900">Why Choose Our Western Collection</h2>
+          </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {features.map((feature, index) => (
-              <div 
-                key={index}
-                className="text-center p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-400 transition-all duration-300"
-              >
-                <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">{feature.icon}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {features.map((f, i) => (
+              <div key={i} className="text-center p-5 bg-white rounded-lg border border-gray-200 hover:border-neutral-900 transition">
+                <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <span className="text-xl">{f.icon}</span>
                 </div>
-                <h3 className="font-medium text-lg text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  {feature.description}
-                </p>
+                <h3 className="text-base font-semibold text-gray-900">{f.title}</h3>
+                <p className="mt-1 text-sm text-gray-600">{f.description}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Style Guide Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-            <div>
-              <h2 className="text-3xl font-light text-gray-900 mb-6">
-                Western Style Guide
-              </h2>
-              <p className="text-lg text-gray-600 mb-6">
-                Learn how to style your western outfits for different occasions. 
-                From casual jeans to professional office wear.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-gray-600 text-sm">1</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-1">Mix & Match</h4>
-                    <p className="text-gray-600 text-sm">Create multiple looks with versatile pieces.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-gray-600 text-sm">2</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-1">Accessorize Smartly</h4>
-                    <p className="text-gray-600 text-sm">Complete your look with the right accessories.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-gray-600 text-sm">3</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-1">Fit Matters</h4>
-                    <p className="text-gray-600 text-sm">Choose the right fit for comfort and style.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">👔</span>
-                </div>
-                <h3 className="text-xl font-medium text-gray-900 mb-2">
-                  Modern Elegance
-                </h3>
-                <p className="text-gray-600">
-                  Embrace contemporary style with our western collection
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gray-900">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-light text-white mb-4">
-            Ready to Upgrade Your Western Wardrobe?
-          </h2>
-          <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-            Browse our collection and discover western wear that matches your modern lifestyle.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              href="/western/bottomwears"
-              className="bg-white text-gray-900 px-8 py-4 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-300"
-            >
-              Start Shopping
-            </Link>
-            <Link 
-              href="/contact"
-              className="border border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white hover:text-gray-900 transition-colors duration-300"
-            >
-              Get Styling Advice
-            </Link>
           </div>
         </div>
       </section>

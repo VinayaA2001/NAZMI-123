@@ -771,3 +771,14 @@ h4, .h4 {
   line-height: 0 !important;
   font-size: 0 !important;
 }
+
+/* Full-bleed utility: let sections escape page rails */
+.full-bleed {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  max-width: 100vw;
+}

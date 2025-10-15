@@ -5,243 +5,211 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const SLIDES = [
-  { 
-    id: 1,
-    src: "/images/poster1.png", 
-    alt: "Summer Collection",
-  },
-  { 
-    id: 2,
-    src: "/images/poster2.png", 
-    alt: "New Arrivals",
-  },
-  { 
-    id: 3,
-    src: "/images/poster3.png", 
-    alt: "Limited Time Offer",
-  },
+  { id: 1, src: "/images/poster1.png", alt: "Summer Collection" },
+  { id: 2, src: "/images/poster2.png", alt: "New Arrivals" },
+  { id: 3, src: "/images/poster3.png", alt: "Limited Time Offer" },
 ];
 
+const AUTOPLAY_MS = 5000;
+const PROGRESS_TICK = 50; // ms
+
 export default function Slomo() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [touchStartX, setTouchStartX] = useState(0);
+  const [current, setCurrent] = useState(0);
+  const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const progressRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartX = useRef<number | null>(null);
+  const timer = useRef<NodeJS.Timeout | null>(null);
+  const progressTimer = useRef<NodeJS.Timeout | null>(null);
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const totalSlides = SLIDES.length;
+  const count = SLIDES.length;
 
-  // Auto-play functionality with progress tracking
-  useEffect(() => {
-    if (!isPlaying || totalSlides <= 1) {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      if (progressRef.current) {
-        clearInterval(progressRef.current);
-      }
-      setProgress(0);
-      return;
-    }
+  const clearTimers = () => {
+    if (timer.current) clearInterval(timer.current);
+    if (progressTimer.current) clearInterval(progressTimer.current);
+  };
 
-    // Reset progress when slide changes
+  const startTimers = () => {
+    if (prefersReducedMotion || !playing || count <= 1) return;
     setProgress(0);
 
-    // Progress animation
-    progressRef.current = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          return 0;
-        }
-        return prev + 100 / (5000 / 50);
+    progressTimer.current = setInterval(() => {
+      setProgress((p) => {
+        const step = (100 * PROGRESS_TICK) / AUTOPLAY_MS;
+        const next = p + step;
+        return next >= 100 ? 100 : next;
       });
-    }, 50);
+    }, PROGRESS_TICK);
 
-    // Slide transition
-    timerRef.current = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % totalSlides);
-    }, 5000);
+    timer.current = setInterval(() => {
+      setCurrent((i) => (i + 1) % count);
+      setProgress(0);
+    }, AUTOPLAY_MS);
+  };
 
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      if (progressRef.current) {
-        clearInterval(progressRef.current);
+  // (Re)start timers when state changes
+  useEffect(() => {
+    clearTimers();
+    startTimers();
+    return clearTimers;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, current, count, prefersReducedMotion]);
+
+  // Pause on tab hidden; resume on visible
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.hidden) {
+        clearTimers();
+      } else {
+        startTimers();
       }
     };
-  }, [isPlaying, totalSlides, currentIndex]);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, prefersReducedMotion]);
 
-  // Reset progress when slide changes
-  useEffect(() => {
-    setProgress(0);
-  }, [currentIndex]);
+  const next = () => setCurrent((i) => (i + 1) % count);
+  const prev = () => setCurrent((i) => (i - 1 + count) % count);
+  const go = (i: number) => setCurrent(i);
 
-  // Handle touch events for swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartX) return;
-
-    const touchEndX = e.changedTouches[0].clientX;
-    const diffX = touchStartX - touchEndX;
-
-    if (Math.abs(diffX) > 50) {
-      if (diffX > 0) {
-        nextSlide();
-      } else {
-        prevSlide();
-      }
-    }
-    setTouchStartX(0);
-  };
-
-  // Navigation functions
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalSlides);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalSlides) % totalSlides);
-  };
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
-
-  // Keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    switch (e.key) {
-      case "ArrowLeft":
-        e.preventDefault();
-        prevSlide();
-        break;
-      case "ArrowRight":
-        e.preventDefault();
-        nextSlide();
-        break;
-      case " ":
-        e.preventDefault();
-        setIsPlaying(!isPlaying);
-        break;
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prev();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      next();
+    } else if (e.key === " ") {
+      e.preventDefault();
+      setPlaying((p) => !p);
     }
   };
 
-  if (totalSlides === 0) {
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current == null) return;
+    const dx = touchStartX.current - (e.changedTouches[0]?.clientX ?? 0);
+    if (Math.abs(dx) > 50) (dx > 0 ? next : prev)();
+    touchStartX.current = null;
+  };
+
+  if (count === 0) {
     return (
-      <div className="w-full h-[400px] bg-gray-100 flex items-center justify-center">
-        <p className="text-gray-500">No slides available</p>
+      <div className="w-full h-[40vh] min-h-[280px] bg-neutral-100 flex items-center justify-center border-b border-black/10">
+        <p className="text-neutral-500 text-sm">No slides available</p>
       </div>
     );
   }
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-black"
       role="region"
       aria-label="Featured promotions carousel"
-      onKeyDown={handleKeyDown}
       tabIndex={0}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      onKeyDown={onKeyDown}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      // Tight borders + no extra outer gaps
+      className="relative w-full overflow-hidden bg-black border-b border-black/10"
+      // Pause on hover/focus for better UX
+      onMouseEnter={() => setPlaying(false)}
+      onMouseLeave={() => setPlaying(true)}
     >
-      {/* Fixed Height Container - No gaps */}
-      <div className="relative w-full h-[70vh] min-h-[500px] max-h-[800px]">
-        {/* Progress Bar */}
-        {isPlaying && totalSlides > 1 && (
-          <div className="absolute top-0 left-0 right-0 z-30 h-1 bg-white/20">
+      {/* Responsive fixed height, compact on mobile */}
+      <div className="relative w-full h-[46vh] sm:h-[56vh] md:h-[64vh] lg:h-[72vh] min-h-[320px] max-h-[820px]">
+        {/* Top progress bar (hairline) */}
+        {playing && count > 1 && !prefersReducedMotion && (
+          <div className="absolute top-0 left-0 right-0 z-30 h-[2px] bg-white/25">
             <div
-              className="h-full bg-white transition-all duration-50 ease-linear"
+              className="h-full bg-white transition-[width] duration-100 ease-linear"
               style={{ width: `${progress}%` }}
             />
           </div>
         )}
 
-        {/* Slides Container - Full screen without gaps */}
-        <div className="relative w-full h-full">
-          {SLIDES.map((slide, index) => (
+        {/* Slides */}
+        <div className="relative w-full h-full will-change-opacity">
+          {SLIDES.map((s, i) => (
             <div
-              key={slide.id}
-              className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
-                index === currentIndex 
-                  ? "opacity-100 z-10" 
-                  : "opacity-0 z-0 pointer-events-none"
+              key={s.id}
+              className={`absolute inset-0 transition-opacity duration-500 ease-linear ${
+                i === current ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
               }`}
             >
               <Image
-                src={slide.src}
-                alt={slide.alt}
+                src={s.src}
+                alt={s.alt}
                 fill
-                priority={index === 0}
+                priority={i === 0}
                 sizes="100vw"
-                className="object-cover select-none"
-                quality={90}
+                className="object-cover select-none pointer-events-none"
+                quality={85}
                 draggable={false}
               />
             </div>
           ))}
         </div>
 
-        {/* Navigation Arrows */}
-        {totalSlides > 1 && (
+        {/* Arrows (compact, contrast, always visible) */}
+        {count > 1 && (
           <>
             <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-3 transition-all duration-300 z-20 backdrop-blur-sm"
+              onClick={prev}
               aria-label="Previous slide"
+              className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 z-20 bg-black/55 hover:bg-black/75 text-white rounded-full p-2.5 sm:p-3 transition-colors backdrop-blur-sm ring-1 ring-white/20"
             >
-              <ChevronLeft size={20} />
+              <ChevronLeft size={18} />
             </button>
-            
             <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-3 transition-all duration-300 z-20 backdrop-blur-sm"
+              onClick={next}
               aria-label="Next slide"
+              className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-20 bg-black/55 hover:bg-black/75 text-white rounded-full p-2.5 sm:p-3 transition-colors backdrop-blur-sm ring-1 ring-white/20"
             >
-              <ChevronRight size={20} />
+              <ChevronRight size={18} />
             </button>
           </>
         )}
 
-        {/* Slide Indicators */}
-        {totalSlides > 1 && (
-          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
-            <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2">
-              {SLIDES.map((_, index) => (
+        {/* Dots (centered, compact) */}
+        {count > 1 && (
+          <div className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 z-20">
+            <div className="flex items-center gap-2 bg-black/45 backdrop-blur-sm rounded-full px-3 py-1.5 ring-1 ring-white/15">
+              {SLIDES.map((_, i) => (
                 <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentIndex
-                      ? "bg-white scale-125"
-                      : "bg-white/50 hover:bg-white/70"
+                  key={i}
+                  onClick={() => go(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  aria-current={i === current}
+                  className={`w-2.5 h-2.5 rounded-full transition-all ${
+                    i === current ? "bg-white scale-110" : "bg-white/60 hover:bg-white/80"
                   }`}
-                  aria-label={`Go to promotion ${index + 1}`}
-                  aria-current={index === currentIndex ? "true" : "false"}
                 />
               ))}
             </div>
           </div>
         )}
 
-        {/* Play/Pause Button */}
-        {totalSlides > 1 && (
+        {/* Play/Pause (optional, small) */}
+        {count > 1 && !prefersReducedMotion && (
           <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all duration-300 z-20 backdrop-blur-sm"
-            aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+            onClick={() => setPlaying((p) => !p)}
+            aria-label={playing ? "Pause slideshow" : "Play slideshow"}
+            className="absolute top-3 right-3 z-20 bg-black/55 hover:bg-black/75 text-white rounded-full p-2 backdrop-blur-sm ring-1 ring-white/20"
           >
-            <div className="w-5 h-5 flex items-center justify-center">
-              {isPlaying ? (
-                <div className="flex gap-0.5">
-                  <div className="w-1 h-3 bg-white"></div>
-                  <div className="w-1 h-3 bg-white"></div>
+            <div className="w-4 h-4 flex items-center justify-center">
+              {playing ? (
+                <div className="flex gap-[3px]">
+                  <div className="w-[3px] h-3 bg-white" />
+                  <div className="w-[3px] h-3 bg-white" />
                 </div>
               ) : (
-                <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent border-r-0 ml-0.5"></div>
+                <div className="w-0 h-0 border-l-[7px] border-l-white border-y-[5px] border-y-transparent" />
               )}
             </div>
           </button>

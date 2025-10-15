@@ -35,7 +35,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "app/returns-exchange"  ],
   "exclude": [
     "node_modules"
   ]

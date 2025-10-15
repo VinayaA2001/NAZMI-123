@@ -72,7 +72,7 @@ export default function EthnicDressesPage() {
       title: "3 Piece Salwar Set",
       description: "Three-piece silk salwar set in elegant orange and violet.",
       price: 1550,
-      originalPrice: 1550, // same as price → no discount
+      originalPrice: 1650, // same as price → no discount
       sizes: ["XXL"],
       colors: [
         { name: "Orange", value: "#f97316" },
@@ -98,7 +98,7 @@ export default function EthnicDressesPage() {
       title: "Off-White Churidar Set",
       description: "Elegant off-white churidar set with a comfortable fit.",
       price: 3000,
-      originalPrice: 3000,
+      originalPrice: 3200,
       sizes: ["M", "XXL"],
       colors: [{ name: "Off White", value: "#f5f5f5" }],
       fabric: "Churidar",
@@ -121,7 +121,7 @@ export default function EthnicDressesPage() {
       title: "Premium 3 Piece Salwar Set",
       description: "Premium cotton three-piece salwar set in rich maroon.",
       price: 2250,
-      originalPrice: 2250,
+      originalPrice: 2450,
       sizes: ["M", "L", "XL"],
       colors: [{ name: "Maroon", value: "#800000" }],
       fabric: "Cotton",
@@ -144,7 +144,7 @@ export default function EthnicDressesPage() {
       title: "Powder Blue Churidar Set",
       description: "Elegant powder blue churidar set with a comfortable fit.",
       price: 2500,
-      originalPrice: 2500,
+      originalPrice: 2600,
       sizes: ["M", "XL"],
       colors: [{ name: "Powder Blue", value: "#B0E0E6" }],
       fabric: "Churidar",
@@ -167,7 +167,7 @@ export default function EthnicDressesPage() {
      title: "Orange Churidar Set",
      description: "Vibrant orange churidar set with a comfortable fit.",
      price: 1700,
-     originalPrice: 1700,
+     originalPrice: 1800,
      sizes: ["XL", "XXL"],
      colors: [{ name: "Orange", value: "#f97316" }],
      fabric: "Churidar",
@@ -187,7 +187,7 @@ export default function EthnicDressesPage() {
      title: "Premium 3 Piece Churidar Set",
      description: "Premium silk three-piece churidar set in pink.",
      price: 2199,
-     originalPrice: 2199,        // same as price → no discount badge
+     originalPrice: 2299,        // same as price → no discount badge
      sizes: ["L", "XXL"],
      colors: [{ name: "Pink", value: "#ec4899" }],
      fabric: "Silk",

@@ -1,22 +1,32 @@
-import { Instagram, Youtube, MessageCircle, Mail, MapPin, Phone, Shield, Truck, CreditCard, Facebook, ExternalLink } from "lucide-react";
+// Frontend/components/Footer.tsx
+import {
+  Instagram,
+  Youtube,
+  MessageCircle,
+  Mail,
+  MapPin,
+  Phone,
+  Shield,
+  Truck,
+  CreditCard,
+  Facebook,
+  ExternalLink,
+} from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  // Location details for Nazmi Boutique
   const location = {
     address: "Nazmi Boutique, Kerala, India",
     googleMapsUrl: "https://maps.google.com/?q=Nazmi+Boutique+Kerala+India",
-    mapsDirections: "https://maps.google.com/maps/dir//Nazmi+Boutique+Kerala+India"
+    mapsDirections: "https://maps.google.com/maps/dir//Nazmi+Boutique+Kerala+India",
   };
 
   return (
     <footer className="bg-[#2C2C2C] text-white mt-20">
-      {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-6 py-16">
-        
-        {/* Trust Badges Section */}
+        {/* Trust Badges */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16 border-b border-gray-700 pb-12">
           <div className="flex items-center gap-4">
             <div className="bg-[#6D7E5F] p-3 rounded-full">
@@ -27,7 +37,7 @@ export default function Footer() {
               <p className="text-gray-400 text-sm">On orders over ₹1999</p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <div className="bg-[#6D7E5F] p-3 rounded-full">
               <Shield className="w-6 h-6" />
@@ -37,17 +47,17 @@ export default function Footer() {
               <p className="text-gray-400 text-sm">100% Protected</p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <div className="bg-[#6D7E5F] p-3 rounded-full">
               <CreditCard className="w-6 h-6" />
             </div>
             <div>
               <h4 className="font-semibold text-lg">Easy Returns</h4>
-              <p className="text-gray-400 text-sm">30 Day Policy</p>
+              <p className="text-gray-400 text-sm">10 Day Policy</p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <div className="bg-[#6D7E5F] p-3 rounded-full">
               <Phone className="w-6 h-6" />
@@ -61,8 +71,7 @@ export default function Footer() {
 
         {/* Main Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          
-          {/* Brand Column */}
+          {/* Brand */}
           <div className="space-y-6">
             <div>
               <h3 className="text-3xl font-serif font-bold text-white mb-4">NAZMI</h3>
@@ -70,14 +79,13 @@ export default function Footer() {
                 Minimal fashion from Kerala — blending Traditional & Western styles with elegance and contemporary design.
               </p>
             </div>
-            
-            {/* Contact Info */}
+
+            {/* Contact */}
             <div className="space-y-4">
               <div className="flex items-start gap-3 text-gray-400">
                 <MapPin className="w-4 h-4 text-[#6D7E5F] mt-1 flex-shrink-0" />
                 <div>
                   <span className="text-sm block mb-1">Kerala, India</span>
-                  {/* Location Action Buttons */}
                   <div className="flex gap-2 mt-2">
                     <a
                       href={location.googleMapsUrl}
@@ -110,24 +118,24 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Social Links */}
+            {/* Social */}
             <div className="flex space-x-3 pt-4">
-              <SocialLink 
+              <SocialLink
                 href="https://www.instagram.com/nazmiboutique_"
                 icon={<Instagram className="w-5 h-5" />}
                 label="Instagram"
               />
-              <SocialLink 
+              <SocialLink
                 href="https://youtube.com/@nazmiboutique-vl6id?si=5DG8qLMa_iz3YvaZ"
                 icon={<Youtube className="w-5 h-5" />}
                 label="YouTube"
               />
-              <SocialLink 
-                href="https://www.facebook.com/share/19oRd6Jgyu/?mibextid=wwXIfr" 
-                icon={<Facebook className="w-5 h-5" />} 
-                label="Facebook" 
+              <SocialLink
+                href="https://www.facebook.com/share/19oRd6Jgyu/?mibextid=wwXIfr"
+                icon={<Facebook className="w-5 h-5" />}
+                label="Facebook"
               />
-              <SocialLink 
+              <SocialLink
                 href="https://wa.me/919995947709"
                 icon={<MessageCircle className="w-5 h-5" />}
                 label="WhatsApp"
@@ -135,7 +143,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Shop Column */}
+          {/* Shop */}
           <div>
             <h4 className="font-semibold text-lg mb-6 text-white uppercase tracking-wider">Shop</h4>
             <ul className="space-y-4">
@@ -147,21 +155,19 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Help Column */}
+          {/* Help */}
           <div>
             <h4 className="font-semibold text-lg mb-6 text-white uppercase tracking-wider">Help</h4>
             <ul className="space-y-4">
               <FooterLink href="/faq" label="FAQ" />
               <FooterLink href="/contact" label="Contact Us" />
               <FooterLink href="/shipping" label="Shipping Info" />
-              <FooterLink href="/returns" label="Returns & Exchanges" />
-  
+              <FooterLink href="/returns-exchange" label="Returns & Exchanges" />
             </ul>
           </div>
 
-          {/* Newsletter & Location Column */}
+          {/* Visit / Newsletter */}
           <div className="space-y-8">
-            {/* Location Map Preview */}
             <div>
               <h4 className="font-semibold text-lg mb-4 text-white uppercase tracking-wider">Visit Us</h4>
               <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
@@ -184,16 +190,13 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Newsletter */}
             <div>
               <h4 className="font-semibold text-lg mb-4 text-white uppercase tracking-wider">Newsletter</h4>
-              <p className="text-gray-400 mb-4 text-sm leading-relaxed">
-                Get exclusive offers and style tips
-              </p>
+              <p className="text-gray-400 mb-4 text-sm leading-relaxed">Get exclusive offers and style tips</p>
               <div className="space-y-3">
                 <div className="flex flex-col gap-2">
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     placeholder="Enter your email"
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#6D7E5F] transition-colors text-sm"
                   />
@@ -206,23 +209,21 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom Bar (plain text, not clickable) */}
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-            {/* Copyright */}
             <div className="text-gray-400 text-sm">
               © {currentYear} Nazmi Boutique. All rights reserved.
             </div>
 
-            {/* Legal Links */}
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
-              <FooterLink href="/privacy" label="Privacy Policy" small />
-              <FooterLink href="/terms" label="Terms of Service" small />
-              <FooterLink href="/cookies" label="Cookie Policy" small />
-              <FooterLink href="/sitemap" label="Sitemap" small />
-            </div>
+            {/* Plain text items, no bullets, no links */}
+            <ul className="flex flex-wrap justify-center gap-6 text-sm list-none p-0 m-0">
+              <FooterText label="Privacy Policy" small />
+              <FooterText label="Terms of Service" small />
+              <FooterText label="Cookie Policy" small />
+              <FooterText label="Sitemap" small />
+            </ul>
 
-            {/* Made With Love */}
             <div className="text-gray-500 text-sm flex items-center gap-2">
               <span>Made with</span>
               <div className="text-red-500 animate-pulse">❤️</div>
@@ -235,8 +236,16 @@ export default function Footer() {
   );
 }
 
-// Reusable Social Link Component
-function SocialLink({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+/* --- Reusable helpers --- */
+function SocialLink({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+}) {
   return (
     <a
       href={href}
@@ -250,14 +259,21 @@ function SocialLink({ href, icon, label }: { href: string; icon: React.ReactNode
   );
 }
 
-// Reusable Footer Link Component
-function FooterLink({ href, label, small = false }: { href: string; label: string; small?: boolean }) {
+function FooterLink({
+  href,
+  label,
+  small = false,
+}: {
+  href: string;
+  label: string;
+  small?: boolean;
+}) {
   return (
     <li>
-      <Link 
+      <Link
         href={href}
         className={`text-gray-400 hover:text-white transition-all duration-300 group ${
-          small ? 'text-sm' : 'text-base'
+          small ? "text-sm" : "text-base"
         }`}
       >
         <span className="relative">
@@ -265,6 +281,14 @@ function FooterLink({ href, label, small = false }: { href: string; label: strin
           <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#6D7E5F] group-hover:w-full transition-all duration-300" />
         </span>
       </Link>
+    </li>
+  );
+}
+
+function FooterText({ label, small = false }: { label: string; small?: boolean }) {
+  return (
+    <li className={small ? "text-sm text-gray-400" : "text-base text-gray-400"}>
+      <span className="cursor-default select-text">{label}</span>
     </li>
   );
 }

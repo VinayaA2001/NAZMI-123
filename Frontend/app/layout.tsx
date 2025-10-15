@@ -25,11 +25,11 @@ const playfair = Playfair_Display({
 
 /* ---- VIEWPORT CONFIG ---- */
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
-  themeColor: '#8B4513', // Rich brown for luxury feel
-  colorScheme: 'light',
-}
+  themeColor: "#8B4513",
+  colorScheme: "light",
+};
 
 /* ---- SEO METADATA ---- */
 export const metadata: Metadata = {
@@ -37,18 +37,27 @@ export const metadata: Metadata = {
     default: "Nazmi Boutique | Premium Traditional & Western Wear",
     template: "%s | Nazmi Boutique",
   },
-  description: "Discover elegant fashion blending traditional Kerala craftsmanship with contemporary western styles. Premium quality sarees, kurtis, dresses, and officewear for the modern woman.",
-  keywords: ["Nazmi Boutique", "Premium Fashion", "Traditional Wear", "Western Wear", "Kerala Boutique", "Women's Clothing", "Ethnic Fashion", "Designer Wear"],
+  description:
+    "Discover elegant fashion blending traditional Kerala craftsmanship with contemporary western styles. Premium quality sarees, kurtis, dresses, and officewear for the modern woman.",
+  keywords: [
+    "Nazmi Boutique",
+    "Premium Fashion",
+    "Traditional Wear",
+    "Western Wear",
+    "Kerala Boutique",
+    "Women's Clothing",
+    "Ethnic Fashion",
+    "Designer Wear",
+  ],
   authors: [{ name: "Nazmi Boutique" }],
   creator: "Nazmi Boutique",
   publisher: "Nazmi Boutique",
-  metadataBase: new URL('https://nazmiboutique.com'),
-  alternates: {
-    canonical: '/',
-  },
+  metadataBase: new URL("https://nazmiboutique.com"),
+  alternates: { canonical: "/" },
   openGraph: {
     title: "Nazmi Boutique | Elegant Traditional & Western Fashion",
-    description: "Premium quality clothing blending Kerala's traditional artistry with contemporary western designs for the modern woman.",
+    description:
+      "Premium quality clothing blending Kerala's traditional artistry with contemporary western designs for the modern woman.",
     url: "https://nazmiboutique.com",
     siteName: "Nazmi Boutique",
     images: [
@@ -74,29 +83,27 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
-      { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+      { url: "/favicon.ico" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
     ],
-    apple: [
-      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
-  manifest: '/manifest.webmanifest',
+  manifest: "/manifest.webmanifest",
 };
 
 /* ---- ROOT LAYOUT ---- */
-export default function RootLayout({ 
-  children 
-}: { 
-  children: React.ReactNode 
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
 }) {
   return (
     <html
@@ -107,7 +114,7 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        
+
         {/* Enhanced Structured Data */}
         <script
           type="application/ld+json"
@@ -115,60 +122,83 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "FashionBoutique",
-              "name": "Nazmi Boutique",
-              "description": "Premium traditional and western wear blending Kerala craftsmanship with contemporary designs",
-              "url": "https://nazmiboutique.com",
-              "telephone": "+91-99959-47709",
-              "email": "nazmiboutique1@gmail.com",
-              "address": {
+              name: "Nazmi Boutique",
+              description:
+                "Premium traditional and western wear blending Kerala craftsmanship with contemporary designs",
+              url: "https://nazmiboutique.com",
+              telephone: "+91-99959-47709",
+              email: "nazmiboutique1@gmail.com",
+              address: {
                 "@type": "PostalAddress",
-                "addressLocality": "Kerala",
-                "addressCountry": "IN"
+                addressLocality: "Kerala",
+                addressCountry: "IN",
               },
-              "openingHours": "Mo-Su 09:00-21:00",
-              "priceRange": "₹799 - ₹5,999",
-              "currenciesAccepted": "INR",
-              "hasOfferCatalog": {
+              openingHours: "Mo-Su 09:00-21:00",
+              priceRange: "₹799 - ₹5,999",
+              currenciesAccepted: "INR",
+              hasOfferCatalog: {
                 "@type": "OfferCatalog",
-                "name": "Fashion Collections",
-                "itemListElement": [
+                name: "Fashion Collections",
+                itemListElement: [
                   {
                     "@type": "OfferCatalog",
-                    "name": "Traditional Wear",
-                    "itemListElement": [
-                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Festive Wear"}},
-                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Kurtis"}},
-                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Ethnic Sets"}}
-                    ]
+                    name: "Traditional Wear",
+                    itemListElement: [
+                      {
+                        "@type": "Offer",
+                        itemOffered: { "@type": "Product", name: "Festive Wear" },
+                      },
+                      {
+                        "@type": "Offer",
+                        itemOffered: { "@type": "Product", name: "Kurtis" },
+                      },
+                      {
+                        "@type": "Offer",
+                        itemOffered: { "@type": "Product", name: "Ethnic Sets" },
+                      },
+                    ],
                   },
                   {
                     "@type": "OfferCatalog",
-                    "name": "Western Wear",
-                    "itemListElement": [
-                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Dresses"}},
-                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Tops"}},
-                      {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Officewear"}}
-                    ]
-                  }
-                ]
-              }
-            })
+                    name: "Western Wear",
+                    itemListElement: [
+                      {
+                        "@type": "Offer",
+                        itemOffered: { "@type": "Product", name: "Dresses" },
+                      },
+                      {
+                        "@type": "Offer",
+                        itemOffered: { "@type": "Product", name: "Tops" },
+                      },
+                      {
+                        "@type": "Offer",
+                        itemOffered: { "@type": "Product", name: "Officewear" },
+                      },
+                    ],
+                  },
+                ],
+              },
+            }),
           }}
         />
       </head>
-      <body className="min-h-dvh flex flex-col bg-white text-gray-900 font-sans antialiased selection:bg-amber-900/20">
-        {/* Enhanced Header */}
+
+      {/* Neutral base + subtle page rails */}
+      <body className="min-h-dvh flex flex-col bg-neutral-50 text-neutral-900 font-sans antialiased selection:bg-amber-900/20">
+        {/* Header */}
         <Header />
 
-        {/* Smooth Main Content */}
-        <main className="flex-1 w-full overflow-hidden">
-          {children}
-        </main>
+        {/* MAIN: centered rails with thin black borders and tight separators */}
+        <div className="mx-auto w-full max-w-6xl flex-1 border-x border-black/10 bg-white">
+          <div className="h-px bg-black/10" />
+          <main className="w-full">{children}</main>
+          <div className="h-px bg-black/10" />
+        </div>
 
-        {/* Enhanced Footer */}
+        {/* Footer */}
         <Footer />
 
-        {/* Premium WhatsApp Button - Fixed */}
+        {/* WhatsApp Button (fixed) */}
         <div className="fixed bottom-6 right-6 z-40">
           <WhatsAppButton
             phone="+919995947709"
@@ -176,11 +206,14 @@ export default function RootLayout({
           />
         </div>
 
-        {/* Enhanced Loading Spinner */}
-        <div id="loading-spinner" className="fixed inset-0 bg-white/90 backdrop-blur-md flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-500">
+        {/* Loading Spinner — subtle dark overlay */}
+        <div
+          id="loading-spinner"
+          className="fixed inset-0 bg-neutral-950/85 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-500"
+        >
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-amber-900/20 border-t-amber-900 mb-4"></div>
-            <p className="text-gray-600 font-medium">Loading Nazmi Boutique...</p>
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-white/20 border-t-white mb-4"></div>
+            <p className="text-neutral-100 font-medium">Loading Nazmi Boutique...</p>
           </div>
         </div>
       </body>
