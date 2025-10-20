@@ -4,99 +4,193 @@ import Image from "next/image";
 
 export default function HomePage() {
   const categories = [
-    { name: "Traditional", href: "/traditional", desc: "Festive Edits • Kurtis • Ethnic Sets", img: "images/anarkali2.png" },
-    { name: "Western", href: "/western", desc: "Tops • Dresses • Officewear", img: "images/short top1.png" },
-    { name: "Special Offers", href: "/sale", desc: "Exclusive Deals • Limited Time", img: "images/sales.png", sale: true },
+    { 
+      name: "Traditional", 
+      href: "/traditional", 
+      desc: "Festive Edits • Kurtis • Ethnic Sets", 
+      img: "images/anarkali2.png"
+    },
+    { 
+      name: "Western", 
+      href: "/western", 
+      desc: "Tops • Dresses • Officewear", 
+      img: "images/short top1.png"
+    },
+    { 
+      name: "Special Offers", 
+      href: "/sale", 
+      desc: "Exclusive Deals • Limited Time", 
+      img: "images/sales.png", 
+      sale: true
+    },
+  ];
+
+  const testimonials = [
+    {
+      quote: "The quality of fabric and stitching is exceptional. Perfect fit every time!",
+      author: "Shamna",
+      role: "Regular Customer",
+      rating: 5
+    },
+    {
+      quote: "Love how they blend traditional designs with modern styles. Always get compliments!",
+      author: "Anjali",
+      role: "Fashion Blogger",
+      rating: 5
+    },
+    {
+      quote: "Fast shipping and excellent customer service. My go-to for ethnic wear!",
+      author: "Shamsiya",
+      role: "Working Professional",
+      rating: 5
+    },
+    {
+      quote: "The attention to detail in every piece is remarkable. Worth every penny!",
+      author: "Lakshmi",
+      role: "Loyal Customer",
+      rating: 5
+    }
+  ];
+
+  const features = [
+    {
+      title: "Free Shipping",
+      description: "Free delivery on all orders above ₹2000",
+      icon: "🚚"
+    },
+    {
+      title: "Premium Quality",
+      description: "Handpicked fabrics with expert craftsmanship",
+      icon: "⭐"
+    },
+    {
+      title: "Easy 7-Day Returns",
+      description: "7-day return for damaged products with video proof",
+      icon: "📦"
+    }
   ];
 
   return (
     <div className="min-h-screen">
-      {/* HERO — full bleed, no side whitespace */}
-      <div className="full-bleed"> 
-        <section
-          className="relative h-[50vh] xs:h-[54vh] sm:h-[58vh] md:h-[64vh] lg:h-[70vh] max-h-[820px] flex items-center justify-center overflow-hidden border-b border-black/10"
-          aria-label="Hero"
-        >
-          {/* Slomo background (fills, no padding/margins) */}
-          <div className="absolute inset-0">
-            <Slomo />
-            <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-5" />
-          </div>
+      {/* HERO SECTION - Optimized for all devices */}
+      <section className="relative h-[70vh] sm:h-[75vh] md:h-[80vh] lg:h-[85vh] min-h-[500px] max-h-[800px] bg-black">
+        <Slomo />
+      </section>
 
-          {/* Minimal overlay content */}
-          <div className="relative z-10 text-center px-2">
-            <h1 className="text-3xl md:text-5xl font-serif font-semibold text-white drop-shadow-[0_1px_6px_rgba(0,0,0,.35)]">
-              Nazmi Boutique
-            </h1>
-            <p className="mt-2 md:mt-3 text-sm md:text-base text-white/90">
-              Traditional elegance meets contemporary style
-            </p>
-          </div>
-        </section>
-      </div>
-
-      {/* …the rest of your page stays the same… */}
-      <section className="py-8 md:py-10 bg-white">
-        <div className="mx-auto max-w-6xl px-4">
-          {/* header */}
-          <div className="text-center mb-8 md:mb-10">
-            <span className="inline-block px-3 py-1.5 bg-amber-100 text-amber-900 rounded-full text-xs md:text-sm font-medium mb-3 uppercase tracking-wide border border-black/10">
-              Collections
-            </span>
-            <h2 className="text-2xl md:text-4xl font-serif font-semibold text-gray-900 mb-2">
-              Discover Our Curated Collections
+      {/* CATEGORIES SECTION - Professional Showcase */}
+      <section className="py-16 sm:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-16">
+            {/* Only Collections badge remains */}
+            <div className="mb-6">
+              <span className="inline-block px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-full uppercase tracking-wider">
+                Collections
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Curated Collections
             </h2>
-            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
-              Explore selections that blend traditional elegance with contemporary style.
+            <div className="w-20 h-1 bg-gray-900 mx-auto mb-6"></div>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
+              Discover exquisite pieces that celebrate heritage while embracing contemporary elegance
             </p>
           </div>
 
-          {/* cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-            {categories.map((cat, idx) => (
-              <a
-                key={cat.name}
-                href={cat.href}
-                className="group relative block overflow-hidden rounded-xl ring-1 ring-black/10 hover:ring-black/40 transition-shadow bg-white"
-              >
-                <div className="relative aspect-[4/5] overflow-hidden">
-                  <Image
-                    src={`/${cat.img}`}
-                    alt={`${cat.name} Collection`}
-                    fill
-                    priority={idx === 0}
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent" />
-                  {cat.sale && (
-                    <div className="absolute top-3 right-3">
-                      <span className="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs font-semibold rounded-full shadow-sm ring-1 ring-black/10">
-                        SALE
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white">
-                  <div className="transition-transform duration-300 group-hover:-translate-y-1">
-                    <h3 className="text-xl md:text-2xl font-serif font-semibold">{cat.name}</h3>
-                    <p className="text-amber-200 text-xs md:text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      {cat.desc}
-                    </p>
-                    <div className="w-10 h-[2px] bg-black/70 md:bg-amber-400 mt-3 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {categories.map((category, index) => (
+              <div key={category.name} className="group relative">
+                <a 
+                  href={category.href} 
+                  className="block overflow-hidden bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-200"
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden">
+                    <Image
+                      src={`/${category.img}`}
+                      alt={category.name}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
+                      priority={index === 0}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    
+                    {category.sale && (
+                      <div className="absolute top-4 right-4">
+                        <span className="bg-red-600 text-white px-4 py-2 text-sm font-bold uppercase tracking-widest rounded-lg shadow-lg">
+                          SALE
+                        </span>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </a>
+                  
+                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <div className="transform transition-all duration-500 group-hover:-translate-y-2">
+                      <h3 className="text-2xl md:text-3xl font-bold mb-3">{category.name}</h3>
+                      <p className="text-gray-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
+                        {category.desc}
+                      </p>
+                      <div className="w-12 h-0.5 bg-white mt-4 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                    </div>
+                  </div>
+                </a>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-8 md:py-10 bg-gradient-to-br from-amber-50 to-white border-t border-black/10">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 text-center">
-            {/* …brand promise cards… */}
+      {/* TESTIMONIALS SECTION - Professional Social Proof */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-2 bg-gray-100 text-gray-900 text-sm font-medium rounded-full mb-4 uppercase tracking-wider">
+              Customer Reviews
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Trusted by Fashion Lovers
+            </h2>
+            <div className="w-20 h-1 bg-gray-900 mx-auto mb-6"></div>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
+              Read what our valued customers have to say about their shopping experience
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+                {/* Star Rating */}
+                <div className="flex justify-center mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <span key={i} className="text-yellow-400 text-xl">⭐</span>
+                  ))}
+                </div>
+                
+                <div className="text-gray-400 text-4xl mb-4 text-center">"</div>
+                <p className="text-gray-700 text-lg mb-6 leading-relaxed text-center">"{testimonial.quote}"</p>
+                
+                <div className="text-center border-t border-gray-100 pt-6">
+                  <p className="font-bold text-gray-900 text-lg">{testimonial.author}</p>
+                  <p className="text-gray-500 text-sm mt-1">{testimonial.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURES SECTION - Above Footer */}
+      <section className="py-16 sm:py-20 bg-black text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div key={index} className="text-center group p-8 rounded-lg hover:bg-gray-900 transition-all duration-300 border border-gray-800">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                  {feature.icon}
+                </div>
+                <h3 className="font-bold text-white text-xl mb-4">{feature.title}</h3>
+                <p className="text-gray-300 text-base leading-relaxed">{feature.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

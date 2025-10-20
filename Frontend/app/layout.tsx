@@ -27,7 +27,7 @@ const playfair = Playfair_Display({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#8B4513",
+  themeColor: "#111827",
   colorScheme: "light",
 };
 
@@ -48,6 +48,10 @@ export const metadata: Metadata = {
     "Women's Clothing",
     "Ethnic Fashion",
     "Designer Wear",
+    "Sarees",
+    "Kurtis",
+    "Dresses",
+    "Officewear"
   ],
   authors: [{ name: "Nazmi Boutique" }],
   creator: "Nazmi Boutique",
@@ -65,7 +69,7 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Nazmi Boutique - Premium Fashion",
+        alt: "Nazmi Boutique - Premium Fashion Collection",
       },
     ],
     locale: "en_IN",
@@ -76,6 +80,7 @@ export const metadata: Metadata = {
     title: "Nazmi Boutique | Premium Fashion",
     description: "Elegant traditional and western wear for the modern woman.",
     images: ["/og-image.jpg"],
+    creator: "@nazmiboutique",
   },
   robots: {
     index: true,
@@ -94,7 +99,9 @@ export const metadata: Metadata = {
       { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
       { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
     ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   manifest: "/manifest.webmanifest",
 };
@@ -113,18 +120,21 @@ export default function RootLayout({
     >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-
-        {/* Enhanced Structured Data */}
+        <link 
+          rel="preconnect" 
+          href="https://fonts.gstatic.com" 
+          crossOrigin="anonymous" 
+        />
+        
+        {/* Enhanced Structured Data for E-commerce */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "FashionBoutique",
+              "@type": "ClothingStore",
               name: "Nazmi Boutique",
-              description:
-                "Premium traditional and western wear blending Kerala craftsmanship with contemporary designs",
+              description: "Premium traditional and western wear blending Kerala craftsmanship with contemporary designs",
               url: "https://nazmiboutique.com",
               telephone: "+91-99959-47709",
               email: "nazmiboutique1@gmail.com",
@@ -136,86 +146,32 @@ export default function RootLayout({
               openingHours: "Mo-Su 09:00-21:00",
               priceRange: "₹799 - ₹5,999",
               currenciesAccepted: "INR",
-              hasOfferCatalog: {
-                "@type": "OfferCatalog",
-                name: "Fashion Collections",
-                itemListElement: [
-                  {
-                    "@type": "OfferCatalog",
-                    name: "Traditional Wear",
-                    itemListElement: [
-                      {
-                        "@type": "Offer",
-                        itemOffered: { "@type": "Product", name: "Festive Wear" },
-                      },
-                      {
-                        "@type": "Offer",
-                        itemOffered: { "@type": "Product", name: "Kurtis" },
-                      },
-                      {
-                        "@type": "Offer",
-                        itemOffered: { "@type": "Product", name: "Ethnic Sets" },
-                      },
-                    ],
-                  },
-                  {
-                    "@type": "OfferCatalog",
-                    name: "Western Wear",
-                    itemListElement: [
-                      {
-                        "@type": "Offer",
-                        itemOffered: { "@type": "Product", name: "Dresses" },
-                      },
-                      {
-                        "@type": "Offer",
-                        itemOffered: { "@type": "Product", name: "Tops" },
-                      },
-                      {
-                        "@type": "Offer",
-                        itemOffered: { "@type": "Product", name: "Officewear" },
-                      },
-                    ],
-                  },
-                ],
-              },
+              sameAs: [
+                "https://www.instagram.com/nazmiboutique/",
+                "https://www.facebook.com/nazmiboutique/"
+              ]
             }),
           }}
         />
       </head>
 
-      {/* Neutral base + subtle page rails */}
-      <body className="min-h-dvh flex flex-col bg-neutral-50 text-neutral-900 font-sans antialiased selection:bg-amber-900/20">
-        {/* Header */}
+      <body className="min-h-screen flex flex-col bg-white text-gray-900 font-sans antialiased">
+        {/* Header - No announcement bar */}
         <Header />
 
-        {/* MAIN: centered rails with thin black borders and tight separators */}
-        <div className="mx-auto w-full max-w-6xl flex-1 border-x border-black/10 bg-white">
-          <div className="h-px bg-black/10" />
-          <main className="w-full">{children}</main>
-          <div className="h-px bg-black/10" />
-        </div>
+        {/* Main Content */}
+        <main className="flex-1 w-full">
+          {children}
+        </main>
 
         {/* Footer */}
         <Footer />
 
-        {/* WhatsApp Button (fixed) */}
-        <div className="fixed bottom-6 right-6 z-40">
-          <WhatsAppButton
-            phone="+919995947709"
-            preset="Hello Nazmi Boutique! I'd like to know more about your collections."
-          />
-        </div>
-
-        {/* Loading Spinner — subtle dark overlay */}
-        <div
-          id="loading-spinner"
-          className="fixed inset-0 bg-neutral-950/85 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-500"
-        >
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-white/20 border-t-white mb-4"></div>
-            <p className="text-neutral-100 font-medium">Loading Nazmi Boutique...</p>
-          </div>
-        </div>
+        {/* WhatsApp Button */}
+        <WhatsAppButton
+          phone="+919995947709"
+          preset="Hello Nazmi Boutique! I'm interested in your collections and would like to know more."
+        />
       </body>
     </html>
   );

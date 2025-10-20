@@ -151,7 +151,7 @@ export default function Footer() {
               <FooterLink href="/western" label="Western Wear" />
               <FooterLink href="/sale/under-999" label="Sale Collection" />
               <FooterLink href="/new-arrivals" label="New Arrivals" />
-              <FooterLink href="/best-sellers" label="Best Sellers" />
+              
             </ul>
           </div>
 
@@ -161,7 +161,7 @@ export default function Footer() {
             <ul className="space-y-4">
               <FooterLink href="/faq" label="FAQ" />
               <FooterLink href="/contact" label="Contact Us" />
-              <FooterLink href="/shipping" label="Shipping Info" />
+              <FooterLink href="/shipping-info" label="Shipping Info" />
               <FooterLink href="/returns-exchange" label="Returns & Exchanges" />
             </ul>
           </div>

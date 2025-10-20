@@ -31,12 +31,14 @@
     ]
   },
   "include": [
-    "Frontend/next-env.d.ts",
-    ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "app/returns-exchange"  ],
+    "**/*.tsx",
+    "app/returns-exchange",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next"
   ]
 }

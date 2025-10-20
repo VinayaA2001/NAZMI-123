@@ -4,7 +4,7 @@ class Config:
     # General App Settings
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'nazmi-boutique-secret-key-2024'
 
-    # Database
+    # SQLAlchemy (if you still need it)
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///boutique.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -20,6 +20,10 @@ class Config:
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'your-email-app-password'
     MAIL_DEFAULT_SENDER = MAIL_USERNAME
 
-    # Razorpay
-    RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID') or 'your-razorpay-key-id'
-    RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET') or 'your-razorpay-key-secret'
+    # MongoDB Configuration
+    MONGO_USER = os.environ.get("MONGO_USER") or "vinayaammu2001"
+    MONGO_PASS = os.environ.get("MONGO_PASS") or "kgroup@123"
+    MONGO_DB = os.environ.get("MONGO_DB") or "nazmi_boutique"
+    MONGO_CLUSTER = os.environ.get("MONGO_CLUSTER") or "cluster0.xxxxx.mongodb.net"
+
+    MONGO_URI = f"mongodb+srv://{MONGO_USER}:{MONGO_PASS}@{MONGO_CLUSTER}/{MONGO_DB}?retryWrites=true&w=majority"

@@ -3,6 +3,41 @@
 @tailwind utilities;
 @import "./typography.css";
 
+/* Custom butterfly animations */
+@keyframes butterfly-flight {
+  0% {
+    transform: translate(-50%, -50%) translateX(-100vw) translateY(-100px) rotate(0deg);
+  }
+  25% {
+    transform: translate(-50%, -50%) translateX(-50vw) translateY(-200px) rotate(45deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateX(0) translateY(-100px) rotate(0deg);
+  }
+  75% {
+    transform: translate(-50%, -50%) translateX(50vw) translateY(-200px) rotate(-45deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translateX(100vw) translateY(-100px) rotate(0deg);
+  }
+}
+
+@keyframes butterfly-flap {
+  0%, 100% {
+    transform: rotate(0deg) scaleY(1);
+  }
+  50% {
+    transform: rotate(5deg) scaleY(0.9);
+  }
+}
+
+.animate-butterfly-flight {
+  animation: butterfly-flight 15s ease-in-out infinite;
+}
+
+.animate-butterfly-flap {
+  animation: butterfly-flap 0.5s ease-in-out infinite;
+}
 /* ========== CSS CUSTOM PROPERTIES ========== */
 :root {
   /* Premium Color Palette */
