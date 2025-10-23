@@ -5,8 +5,8 @@ import Image from "next/image";
 export default function HomePage() {
   const categories = [
     { 
-      name: "Traditional", 
-      href: "/traditional", 
+      name: "Ethnic Wears", 
+      href: "/Ethnic-Wears",  // Fixed path
       desc: "Festive Edits • Kurtis • Ethnic Sets", 
       img: "images/anarkali2.png"
     },

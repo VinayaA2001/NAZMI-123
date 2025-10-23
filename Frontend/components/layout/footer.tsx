@@ -147,7 +147,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-lg mb-6 text-white uppercase tracking-wider">Shop</h4>
             <ul className="space-y-4">
-              <FooterLink href="/traditional" label="Traditional Wear" />
+              <FooterLink href="/Ethnic-Wears" label="Ethnic-Wears" />
               <FooterLink href="/western" label="Western Wear" />
               <FooterLink href="/sale/under-999" label="Sale Collection" />
               <FooterLink href="/new-arrivals" label="New Arrivals" />

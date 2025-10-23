@@ -7,17 +7,17 @@ import { useEffect, useState } from "react";
 const SLIDES = [
   { 
     id: 1, 
-    src: "/images/poster1.png", 
+    src: "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1761056854/sale1_xa0van.jpg", 
     alt: "Summer Collection - Premium Traditional Wear"
   },
   { 
     id: 2, 
-    src: "/images/poster2.png", 
+    src: "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1761056854/sale2_zqwjit.jpg", 
     alt: "New Arrivals - Contemporary Western Styles"
   },
   { 
     id: 3, 
-    src: "/images/poster3.png", 
+    src: "https://res.cloudinary.com/dq5xhg9uo/image/upload/v1761056853/sale3_td4xeo.jpg", 
     alt: "Limited Time Offer - Exclusive Boutique Deals"
   },
 ];

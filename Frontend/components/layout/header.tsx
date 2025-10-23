@@ -92,7 +92,7 @@ export default function Header() {
 
   const desktopNavItems: NavItem[] = [
     { href: "/", label: "Home" },
-    { href: "/traditional", label: "Traditional", featured: true },
+    { href: "/Ethnic-Wears", label: "Ethnic Wears", featured: true }, // Fixed path
     { href: "/western", label: "Western", featured: true },
     { href: "/new-arrivals", label: "New Arrivals" },
     { href: "/sale", label: "Sale", highlight: true }
@@ -100,7 +100,7 @@ export default function Header() {
 
   const mobileNavItems: NavItem[] = [
     { href: "/", label: "Home", icon: "🏠" },
-    { href: "/traditional", label: "Traditional", icon: "👘" },
+    { href: "/Ethnic-Wears", label: "Ethnic Wears", icon: "👘" }, // Fixed path
     { href: "/western", label: "Western", icon: "👗" },
     { href: "/new-arrivals", label: "New Arrivals", icon: "🆕" },
     { href: "/sale", label: "Sale", icon: "🔥", highlight: true },
@@ -199,19 +199,19 @@ export default function Header() {
                 >
                   <span className="relative z-10">{label}</span>
                   
-                  {/* Animated underline */}
-                  <div className={`absolute bottom-0 left-1/2 w-0 h-0.5 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10 ${
+                  {/* Fixed Animated underline */}
+                  <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 transition-all duration-300 ${
                     isActiveLink(href) 
                       ? highlight 
-                        ? "w-4/5 left-1/10 bg-red-600" 
+                        ? "w-4/5 bg-red-600" 
                         : featured
-                          ? "w-4/5 left-1/10 bg-amber-600"
-                          : "w-4/5 left-1/10 bg-gray-900"
+                          ? "w-4/5 bg-amber-600"
+                          : "w-4/5 bg-gray-900"
                       : highlight 
-                        ? "bg-red-500" 
+                        ? "bg-red-500 group-hover:w-4/5 w-0" 
                         : featured
-                          ? "bg-amber-500"
-                          : "bg-gray-600"
+                          ? "bg-amber-500 group-hover:w-4/5 w-0"
+                          : "bg-gray-600 group-hover:w-4/5 w-0"
                   }`} />
                   
                   {/* Background hover effect */}
