@@ -96,30 +96,143 @@ def health():
 
 @app.route('/api/products', methods=['GET'])
 def get_products():
-    """Fetch all products (optionally filter by category or product_code)"""
-    category = request.args.get('category')
-    product_code = request.args.get('product_code')
-    query = {}
-    if category:
-        query['category'] = category
-    if product_code:
-        query['product_code'] = product_code
+    """Fetch all products with proper variant structure"""
+    try:
+        category = request.args.get('category')
+        product_code = request.args.get('product_code')
+        query = {}
+        if category:
+            query['category'] = category
+        if product_code:
+            query['product_code'] = product_code
 
-    products = db.products.find(query)
-    output = []
-    for p in products:
-        output.append({
-            'id': str(p.get('_id')),
-            'product_code': p.get('product_code', ''),
-            'material': p.get('material', ''),
-            'category': p.get('category', ''),
-            'size': p.get('size', ''),
-            'colour': p.get('colour', ''),
-            'price': p.get('price', 0),
-            'images': p.get('images', []),
-            'stock': p.get('stock', None)
-        })
-    return jsonify(output)
+        print(f"Querying products with: {query}")
+        
+        # Get all products from MongoDB
+        products_cursor = db.products.find(query)
+        products_list = list(products_cursor)
+        
+        print(f"Found {len(products_list)} raw products in database")
+        
+        if not products_list:
+            return jsonify([])
+        
+        # Group products by product_code to handle variants
+        product_map = {}
+        
+        for product in products_list:
+            try:
+                product_code = product.get('product_code')
+                if not product_code:
+                    print(f"Skipping product without product_code: {product.get('_id')}")
+                    continue
+                
+                if product_code not in product_map:
+                    # Create base product structure
+                    product_map[product_code] = {
+                        '_id': str(product['_id']),
+                        'product_code': product_code,
+                        'product_name': product.get('product_name', ''),
+                        'material': product.get('material', 'Unknown Material'),
+                        'category': product.get('category', 'Unknown Category'),
+                        'images': product.get('images', ['/images/placeholder.jpg']),
+                        'description': f"{product.get('material', '')} {product.get('category', '')}",
+                        'variants': [],
+                        'availableSizes': set(),
+                        'availableColors': set(),
+                        'totalStock': 0,
+                        'minPrice': float('inf'),
+                        'maxPrice': 0
+                    }
+                
+                # Add this product as a variant
+                base_product = product_map[product_code]
+                
+                # Handle sizes (can be array or string)
+                sizes = product.get('size', [])
+                if not isinstance(sizes, list):
+                    sizes = [sizes] if sizes else ['One Size']
+                
+                # Handle colors (can be array or string)
+                colors = product.get('colour', [])
+                if not isinstance(colors, list):
+                    colors = [colors] if colors else ['Standard']
+                
+                # Create variants for each size and color combination
+                for size in sizes:
+                    for color in colors:
+                        variant = {
+                            '_id': f"{product['_id']}_{size}_{color}",
+                            'size': size,
+                            'colour': color,
+                            'stock': int(product.get('stock', 10)),
+                            'price': float(product.get('price', 999))
+                        }
+                        
+                        base_product['variants'].append(variant)
+                        
+                        # Update available sizes and colors
+                        base_product['availableSizes'].add(size)
+                        base_product['availableColors'].add(color)
+                        
+                        # Update stock and price range
+                        base_product['totalStock'] += variant['stock']
+                        base_product['minPrice'] = min(base_product['minPrice'], variant['price'])
+                        base_product['maxPrice'] = max(base_product['maxPrice'], variant['price'])
+                
+            except Exception as e:
+                print(f"Error processing product {product.get('_id')}: {str(e)}")
+                continue
+        
+        # Convert sets to lists and handle edge cases
+        output = []
+        for product_code, product in product_map.items():
+            try:
+                # Ensure we have valid values
+                if product['minPrice'] == float('inf'):
+                    product['minPrice'] = 0
+                
+                # Convert sets to sorted lists
+                product['availableSizes'] = sorted(list(product['availableSizes']))
+                product['availableColors'] = sorted(list(product['availableColors']))
+                
+                # Ensure we have at least some sizes and colors
+                if not product['availableSizes']:
+                    product['availableSizes'] = ['S', 'M', 'L', 'XL']
+                if not product['availableColors']:
+                    product['availableColors'] = ['Red', 'Blue', 'Green']
+                
+                # Ensure minimum stock
+                if product['totalStock'] <= 0:
+                    product['totalStock'] = 10
+                    for variant in product['variants']:
+                        variant['stock'] = 10
+                
+                # Ensure images are properly formatted (keep Cloudinary URLs as-is)
+                if not product['images'] or not isinstance(product['images'], list):
+                    product['images'] = ['/images/placeholder.jpg']
+                else:
+                    # Keep Cloudinary URLs as they are
+                    updated_images = []
+                    for img in product['images']:
+                        if isinstance(img, str) and (img.startswith('http') or img.startswith('/')):
+                            updated_images.append(img)
+                        else:
+                            updated_images.append(f"/images/{img}")
+                    product['images'] = updated_images
+                
+                output.append(product)
+                
+            except Exception as e:
+                print(f"Error finalizing product {product_code}: {str(e)}")
+                continue
+        
+        print(f"Returning {len(output)} formatted products")
+        return jsonify(output)
+        
+    except Exception as e:
+        print(f"Error in get_products: {str(e)}")
+        return jsonify({'error': f'Failed to fetch products: {str(e)}'}), 500
 
 @app.route('/api/products/<product_id>', methods=['GET'])
 def get_product(product_id):
@@ -129,6 +242,7 @@ def get_product(product_id):
         return jsonify({'error': 'Invalid product id'}), 400
     if not product:
         return jsonify({'error': 'Product not found'}), 404
+    
     return jsonify({
         'id': str(product['_id']),
         'product_code': product.get('product_code', ''),
@@ -146,6 +260,40 @@ def get_categories():
     categories = db.products.distinct("category")
     return jsonify(categories)
 
+# Debug endpoint to see raw data
+@app.route('/api/debug/products', methods=['GET'])
+def debug_products():
+    """Debug endpoint to see raw product data"""
+    try:
+        products = list(db.products.find().limit(10))
+        # Convert ObjectId to string for JSON serialization
+        for product in products:
+            product['_id'] = str(product['_id'])
+        return jsonify({
+            'count': len(products),
+            'products': products
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Check database connection
+@app.route('/api/debug/db', methods=['GET'])
+def debug_db():
+    """Check database connection and collections"""
+    try:
+        collections = db.list_collection_names()
+        products_count = db.products.count_documents({})
+        users_count = db.users.count_documents({})
+        
+        return jsonify({
+            'collections': collections,
+            'products_count': products_count,
+            'users_count': users_count,
+            'status': 'connected'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 # Admin-only product creation endpoint (simple)
 @app.route('/api/products', methods=['POST'])
 def create_product():
@@ -154,25 +302,35 @@ def create_product():
     if not data:
         return jsonify({'error': 'JSON body required'}), 400
 
-    # Minimal validation
-    required = ['product_code', 'price']
+    # Required fields
+    required = ['product_code', 'price', 'material', 'category']
     for r in required:
         if r not in data:
             return jsonify({'error': f'{r} is required'}), 400
 
-    doc = {
-        'product_code': str(data.get('product_code')),
-        'material': data.get('material'),
-        'category': data.get('category'),
-        'size': data.get('size'),
-        'colour': data.get('colour'),
-        'price': float(data.get('price', 0)),
-        'images': data.get('images', []),
-        'stock': int(data.get('stock', 0)) if data.get('stock') is not None else None,
-        'created_at': datetime.utcnow()
-    }
-    res = db.products.insert_one(doc)
-    return jsonify({'message': 'Product created', 'id': str(res.inserted_id)}), 201
+    try:
+        doc = {
+            'product_code': str(data.get('product_code')),
+            'product_name': data.get('product_name', ''),
+            'material': data.get('material'),
+            'category': data.get('category'),
+            'size': data.get('size', 'One Size'),
+            'colour': data.get('colour', 'Standard'),
+            'price': float(data.get('price', 0)),
+            'images': data.get('images', ['/images/placeholder.jpg']),
+            'stock': int(data.get('stock', 10)),
+            'created_at': datetime.utcnow()
+        }
+        
+        res = db.products.insert_one(doc)
+        return jsonify({
+            'message': 'Product created', 
+            'id': str(res.inserted_id),
+            'product_code': doc['product_code']
+        }), 201
+        
+    except Exception as e:
+        return jsonify({'error': f'Failed to create product: {str(e)}'}), 500
 
 # ------------------- USERS -------------------
 
@@ -281,7 +439,8 @@ def create_order(current_user):
             "order_id": order_id,
             "product_id": ObjectId(item['product_id']),
             "quantity": int(item['quantity']),
-            "size": item.get('size'),
+            'size': item.get('size'),
+            'colour': item.get('color'),
             "price": float(item['price'])
         })
 
@@ -541,4 +700,7 @@ def subscribe():
 if __name__ == '__main__':
     print("🚀 Starting NAZMI Boutique Backend...")
     print("📍 Listening on http://127.0.0.1:5000")
+    print("🔍 Debug endpoints available:")
+    print("   - http://127.0.0.1:5000/api/debug/db (Check database connection)")
+    print("   - http://127.0.0.1:5000/api/debug/products (Check raw product data)")
     app.run(debug=True, port=5000, host='0.0.0.0')
