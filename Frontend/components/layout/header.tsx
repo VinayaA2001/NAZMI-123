@@ -94,7 +94,6 @@ export default function Header() {
     { href: "/", label: "Home" },
     { href: "/Ethnic-Wears", label: "Ethnic Wears", featured: true }, // Fixed path
     { href: "/western", label: "Western", featured: true },
-    { href: "/new-arrivals", label: "New Arrivals" },
     { href: "/sale", label: "Sale", highlight: true }
   ];
 
@@ -102,7 +101,6 @@ export default function Header() {
     { href: "/", label: "Home", icon: "🏠" },
     { href: "/Ethnic-Wears", label: "Ethnic Wears", icon: "👘" }, // Fixed path
     { href: "/western", label: "Western", icon: "👗" },
-    { href: "/new-arrivals", label: "New Arrivals", icon: "🆕" },
     { href: "/sale", label: "Sale", icon: "🔥", highlight: true },
     { href: "/account", label: "My Account", icon: "👤" },
     { href: "/wishlist", label: `Wishlist`, icon: "❤️" },
