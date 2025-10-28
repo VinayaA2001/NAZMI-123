@@ -11,10 +11,10 @@ type Category = {
   sale?: boolean;
 };
 
+/* ---------- Mobile Bottom Dock ---------- */
 function MobileCategoryDock({ categories }: { categories: Category[] }) {
   const mains = categories.map((c) => ({
     ...c,
-    // tiny emoji helpers; swap for icons later if you want
     emoji:
       c.name.toLowerCase().includes("ethnic")
         ? "🪔"
@@ -33,12 +33,11 @@ function MobileCategoryDock({ categories }: { categories: Category[] }) {
           <li key={m.name} className="flex">
             <Link
               href={m.href}
-              className="flex-1 py-3 px-2 flex flex-col items-center justify-center gap-1"
+              className="flex-1 py-2.5 px-1.5 flex flex-col items-center justify-center gap-1 active:scale-[0.98] transition"
+              aria-label={m.name}
             >
-              <span className="text-xl leading-none">{m.emoji}</span>
-              <span className="text-[11px] font-medium text-gray-900">
-                {m.name}
-              </span>
+              <span className="text-lg leading-none">{m.emoji}</span>
+              <span className="text-[11px] font-medium text-gray-900">{m.name}</span>
               {m.sale ? (
                 <span className="text-[10px] font-semibold text-red-600">SALE</span>
               ) : null}
@@ -50,18 +49,22 @@ function MobileCategoryDock({ categories }: { categories: Category[] }) {
   );
 }
 
-function MobileCategoryChips({ categories }: { categories: Category[] }) {
+/* ---------- Category Quick Nav (under hero) ---------- */
+function CategoryQuickNav({ categories }: { categories: Category[] }) {
   return (
-    <div className="sm:hidden bg-white border-b border-gray-200">
+    <div className="bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 py-3">
-        <div className="flex gap-2 overflow-x-auto no-scrollbar [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex gap-2 sm:gap-3 overflow-x-auto no-scrollbar [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-wrap sm:justify-center">
           {categories.map((c) => (
             <Link
               key={c.name}
               href={c.href}
-              className="whitespace-nowrap px-3 py-2 rounded-full text-sm border border-gray-300 hover:border-gray-900 transition-colors"
+              className="inline-flex items-center gap-2 whitespace-nowrap px-3.5 py-2 rounded-full text-sm border border-gray-300 hover:border-gray-900 hover:bg-gray-50 transition-colors"
+              aria-label={`Go to ${c.name}`}
             >
-              {c.name} {c.sale ? "🔥" : ""}
+              <span className="text-base" aria-hidden>•</span>
+              <span className="font-medium">{c.name}</span>
+              {c.sale ? <span className="text-[10px] font-semibold text-red-600">SALE</span> : null}
             </Link>
           ))}
         </div>
@@ -107,70 +110,70 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen pb-16 sm:pb-0">{/* pb for mobile dock */}
-      {/* HERO */}
-      <section className="relative h-[70vh] sm:h-[75vh] md:h-[80vh] lg:h-[85vh] min-h-[500px] max-h-[800px] bg-black">
+    <div className="min-h-screen pb-16 sm:pb-0">
+      {/* HERO — visual only, no text/CTA; small negative margin removes hairline gap */}
+      <section
+        className="relative -mt-px h-[65vh] sm:h-[72vh] md:h-[78vh] min-h-[460px] max-h-[760px] bg-black"
+        aria-label="Hero"
+      >
         <Slomo />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
       </section>
 
-      {/* MOBILE QUICK CATEGORIES (chips under hero) */}
-      <MobileCategoryChips categories={categories} />
+      {/* CATEGORY QUICK LINKS (all devices) */}
+      <CategoryQuickNav categories={categories} />
 
       {/* CATEGORIES GRID */}
-      <section className="py-10 sm:py-16 bg-gray-50">
+      <section className="py-10 sm:py-14 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10 sm:mb-16">
-            <div className="mb-5">
-              <span className="inline-block px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-full uppercase tracking-wider">
-                Collections
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Curated Collections
+          <div className="text-center mb-8 sm:mb-12">
+            <span className="inline-block px-3.5 py-1.5 bg-gray-900 text-white text-xs sm:text-sm font-medium rounded-full uppercase tracking-wider">
+              Collections
+            </span>
+            <h2 className="mt-4 text-[clamp(20px,3.6vw,36px)] font-bold text-gray-900">
+              Curated for Every Occasion
             </h2>
-            <div className="w-16 sm:w-20 h-1 bg-gray-900 mx-auto mb-5 sm:mb-6" />
-            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              Discover exquisite pieces that celebrate heritage while embracing contemporary elegance
+            <p className="mt-2.5 text-gray-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+              Celebrate heritage with a modern touch — from festive sets to everyday essentials.
             </p>
           </div>
 
-          {/* mobile: 2-cols, larger tap targets */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6">
             {categories.map((category, index) => (
               <div key={category.name} className="group relative">
                 <Link
                   href={category.href}
-                  className="block overflow-hidden bg-white rounded-xl sm:rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-200"
+                  className="block overflow-hidden bg-white rounded-xl sm:rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900/20"
                   aria-label={category.name}
                 >
-                  <div className="relative aspect-[3/4] overflow-hidden">
+                  <div className="relative aspect-[3/4]">
                     <Image
                       src={`/${category.img}`}
                       alt={category.name}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1200px) 33vw, 33vw"
                       priority={index === 0}
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.06] will-change-transform"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1200px) 33vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     {category.sale && (
-                      <div className="absolute top-2 right-2 sm:top-4 sm:right-4">
-                        <span className="bg-red-600 text-white px-2 py-1 sm:px-4 sm:py-2 text-[10px] sm:text-sm font-bold uppercase tracking-widest rounded-md sm:rounded-lg shadow-lg">
+                      <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
+                        <span className="bg-red-600 text-white px-2 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-md shadow">
                           SALE
                         </span>
                       </div>
                     )}
                   </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-8 text-white">
-                    <div className="transform transition-all duration-500 group-hover:-translate-y-1 sm:group-hover:-translate-y-2">
-                      <h3 className="text-lg sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-3">
+                  <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-5 text-white">
+                    <div className="transition-transform duration-300 group-hover:-translate-y-0.5">
+                      <h3 className="text-[clamp(14px,2.8vw,22px)] font-semibold">
                         {category.name}
                       </h3>
-                      <p className="hidden sm:block text-gray-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
+                      <p className="hidden sm:block text-gray-200 text-xs mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         {category.desc}
                       </p>
-                      <div className="w-10 sm:w-12 h-0.5 bg-white mt-2 sm:mt-4 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                      <div className="w-10 sm:w-12 h-0.5 bg-white mt-2 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                     </div>
                   </div>
                 </Link>
@@ -181,65 +184,72 @@ export default function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-12 sm:py-20 bg-white">
+      <section className="py-10 sm:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10 sm:mb-16">
-            <span className="inline-block px-4 py-2 bg-gray-100 text-gray-900 text-xs sm:text-sm font-medium rounded-full mb-3 sm:mb-4 uppercase tracking-wider">
+          <div className="text-center mb-8 sm:mb-12">
+            <span className="inline-block px-3 py-1.5 bg-gray-100 text-gray-900 text-xs sm:text-sm font-medium rounded-full uppercase tracking-wider">
               Customer Reviews
             </span>
-            <h2 className="text-2xl sm:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+            <h2 className="mt-3 text-[clamp(20px,3.6vw,36px)] font-bold text-gray-900">
               Trusted by Fashion Lovers
             </h2>
-            <div className="w-16 sm:w-20 h-1 bg-gray-900 mx-auto mb-5 sm:mb-6"></div>
-            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              Read what our valued customers have to say about their shopping experience
+            <p className="mt-2 text-gray-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+              What our customers say about their Nazmi experience.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
             {testimonials.map((t, i) => (
-              <div
+              <article
                 key={i}
-                className="bg-white p-6 sm:p-8 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 group"
+                className="bg-white p-5 sm:p-6 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 flex flex-col"
               >
-                <div className="flex justify-center mb-3 sm:mb-4">
+                <div className="flex justify-center mb-2">
                   {[...Array(t.rating)].map((_, i2) => (
-                    <span key={i2} className="text-yellow-400 text-lg sm:text-xl">⭐</span>
+                    <span key={i2} className="text-yellow-400 text-base sm:text-lg">⭐</span>
                   ))}
                 </div>
-                <div className="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4 text-center">"</div>
-                <p className="text-gray-700 text-base sm:text-lg mb-5 sm:mb-6 leading-relaxed text-center">
-                  "{t.quote}"
-                </p>
-                <div className="text-center border-t border-gray-100 pt-4 sm:pt-6">
-                  <p className="font-bold text-gray-900 text-sm sm:text-lg">{t.author}</p>
-                  <p className="text-gray-500 text-xs sm:text-sm mt-1">{t.role}</p>
+                <blockquote className="text-gray-700 text-sm sm:text-base leading-relaxed text-center flex-1">
+                  “{t.quote}”
+                </blockquote>
+                <div className="text-center border-t border-gray-100 pt-3 mt-4">
+                  <p className="font-semibold text-gray-900 text-sm sm:text-base">{t.author}</p>
+                  <p className="text-gray-500 text-xs sm:text-sm mt-0.5">{t.role}</p>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
       {/* FEATURES */}
-      <section className="py-12 sm:py-20 bg-black text-white">
+      <section className="py-10 sm:py-16 bg-black text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-6">
             {features.map((f, i) => (
               <div
                 key={i}
-                className="text-center group p-6 sm:p-8 rounded-lg hover:bg-gray-900 transition-all duration-300 border border-gray-800"
+                className="text-center p-6 rounded-xl border border-gray-800 hover:bg-gray-900 transition-all duration-300"
               >
-                <div className="text-3xl sm:text-4xl mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {f.icon}
-                </div>
-                <h3 className="font-bold text-white text-lg sm:text-xl mb-2 sm:mb-4">{f.title}</h3>
-                <p className="text-gray-300 text-sm sm:text-base leading-relaxed">{f.description}</p>
+                <div className="text-3xl sm:text-4xl mb-3">{f.icon}</div>
+                <h3 className="font-semibold text-white text-base sm:text-lg mb-1.5">
+                  {f.title}
+                </h3>
+                <p className="text-gray-300 text-sm leading-relaxed">{f.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
+      {/* PRODUCT COLOR DISCLAIMER */}
+<section className="bg-white py-6 border-t border-gray-200">
+  <div className="max-w-5xl mx-auto px-4 text-center">
+    <p className="text-[13px] sm:text-sm text-gray-500 leading-relaxed">
+      <span className="font-semibold text-gray-700">Please Note:</span> The photo may slightly differ from the actual item in terms of color due to lighting during photo shooting or monitor display variations.
+    </p>
+  </div>
+</section>
+
 
       {/* MOBILE BOTTOM DOCK */}
       <MobileCategoryDock categories={categories} />

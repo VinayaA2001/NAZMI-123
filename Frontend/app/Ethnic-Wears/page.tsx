@@ -166,17 +166,7 @@ export default function EthnicWearListingPage() {
   const [collapsed, setCollapsed] = useState(true); // default closed for tight layout
   const scrollRef = useRef(0);
 
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY || 0;
-      const prev = scrollRef.current || 0;
-      if (y > 120 && y > prev + 10) setCollapsed(true); // scrolling down: fold
-      else if (y < prev - 10) setCollapsed(false); // scrolling up: expand
-      scrollRef.current = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  
 
   const clearFilters = () => {
     setSize("");
@@ -321,6 +311,27 @@ export default function EthnicWearListingPage() {
           </p>
         </div>
       </div>
+{/* Back to Home Icon Bar */}
+<div className="sticky top-[var(--header-offset)] z-40 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+  <div className="max-w-7xl mx-auto px-4 py-2 flex justify-start">
+    <Link
+      href="/"
+      className="inline-flex items-center gap-2 text-gray-700 hover:text-black text-sm font-medium transition"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2}
+        stroke="currentColor"
+        className="w-4 h-4"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+      </svg>
+      Back to Home
+    </Link>
+  </div>
+</div>
 
       {/* Collapsible filter bar (tight spacing, no extra gap when closed) */}
       <div className="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/70">
