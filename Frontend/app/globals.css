@@ -213,3 +213,8 @@ a:focus-visible {
   padding: 0 !important;
   line-height: 1.2 !important;
 }
+/* Remove unwanted top spacing between header and hero */
+main > section:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}

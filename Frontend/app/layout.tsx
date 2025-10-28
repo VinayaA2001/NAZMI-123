@@ -31,45 +31,53 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-/* ---- SEO METADATA ---- */
+/* ---- ENHANCED SEO METADATA ---- */
 export const metadata: Metadata = {
   title: {
-    default: "Nazmi Boutique | Premium Traditional & Western Wear",
-    template: "%s | Nazmi Boutique",
+    default: "Nazmi Boutique Koduvally Kozhikode | Premium Traditional & Western Wear",
+    template: "%s | Nazmi Boutique Koduvally Kozhikode",
   },
   description:
-    "Discover elegant fashion blending traditional Kerala craftsmanship with contemporary western styles. Premium quality sarees, kurtis, dresses, and officewear for the modern woman.",
+    "Nazmi Boutique in Koduvally, Kozhikode — Kerala’s premium women’s fashion destination offering elegant traditional wear, western collections, smart TV prizes on purchases above ₹2000, and free delivery within 3 km radius. Explore ethnic kurtis, dresses, and festive wear crafted with perfection.",
   keywords: [
     "Nazmi Boutique",
-    "Premium Fashion",
-    "Traditional Wear",
-    "Western Wear",
+    "Nazmi Boutique Koduvally",
+    "Nazmi Boutique Kozhikode",
+    "Nazmi Boutique Calicut",
     "Kerala Boutique",
     "Women's Clothing",
-    "Ethnic Fashion",
-    "Designer Wear",
+    "Ethnic Wear",
+    "Traditional Wear",
+    "Western Wear",
     "Sarees",
     "Kurtis",
     "Dresses",
-    "Officewear"
+    "Officewear",
+    "Smart TV Offer",
+    "Free Delivery within 3km",
+    "Buy Above 2000 Win Prizes",
+    "Kerala Fashion Store",
+    "Nazmi Boutique Near Me",
+    "Koduvally Boutique",
+    "Koduvally Women's Fashion",
   ],
-  authors: [{ name: "Nazmi Boutique" }],
+  authors: [{ name: "Nazmi Boutique Koduvally Kozhikode" }],
   creator: "Nazmi Boutique",
   publisher: "Nazmi Boutique",
   metadataBase: new URL("https://nazmiboutique.com"),
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Nazmi Boutique | Elegant Traditional & Western Fashion",
+    title: "Nazmi Boutique Koduvally Kozhikode | Elegant Traditional & Western Fashion",
     description:
-      "Premium quality clothing blending Kerala's traditional artistry with contemporary western designs for the modern woman.",
+      "Nazmi Boutique, the best women's fashion store in Koduvally, Kozhikode — discover elegant ethnic and western wear with offers above ₹2000 including Smart TV prizes and free delivery around 3 km.",
     url: "https://nazmiboutique.com",
-    siteName: "Nazmi Boutique",
+    siteName: "Nazmi Boutique Koduvally Kozhikode",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Nazmi Boutique - Premium Fashion Collection",
+        alt: "Nazmi Boutique Koduvally Kozhikode - Premium Fashion Collection",
       },
     ],
     locale: "en_IN",
@@ -77,8 +85,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nazmi Boutique | Premium Fashion",
-    description: "Elegant traditional and western wear for the modern woman.",
+    title: "Nazmi Boutique Koduvally Kozhikode | Premium Fashion Offers",
+    description:
+      "Shop stylish ethnic & western wear in Koduvally, Kozhikode — get Smart TV prizes on ₹2000+ purchases & enjoy free delivery within 3 km.",
     images: ["/og-image.jpg"],
     creator: "@nazmiboutique",
   },
@@ -99,19 +108,13 @@ export const metadata: Metadata = {
       { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
       { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
     ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.webmanifest",
 };
 
 /* ---- ROOT LAYOUT ---- */
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en-IN"
@@ -120,57 +123,71 @@ export default function RootLayout({
     >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link 
-          rel="preconnect" 
-          href="https://fonts.gstatic.com" 
-          crossOrigin="anonymous" 
-        />
-        
-        {/* Enhanced Structured Data for E-commerce */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Enhanced Structured Data for Local E-commerce */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "ClothingStore",
-              name: "Nazmi Boutique",
-              description: "Premium traditional and western wear blending Kerala craftsmanship with contemporary designs",
+              name: "Nazmi Boutique Koduvally Kozhikode",
+              description:
+                "Nazmi Boutique — premium women's clothing store in Koduvally, Kozhikode offering traditional & western wear, Smart TV prizes above ₹2000 purchase, and free delivery around 3 km.",
               url: "https://nazmiboutique.com",
               telephone: "+91-99959-47709",
               email: "nazmiboutique1@gmail.com",
               address: {
                 "@type": "PostalAddress",
-                addressLocality: "Kerala",
+                streetAddress: "Koduvally, Kozhikode, Kerala",
+                addressLocality: "Koduvally",
+                addressRegion: "Kerala",
+                postalCode: "673572",
                 addressCountry: "IN",
               },
               openingHours: "Mo-Su 09:00-21:00",
-              priceRange: "₹799 - ₹5,999",
+              priceRange: "₹799 - ₹10000",
               currenciesAccepted: "INR",
+              areaServed: {
+                "@type": "Place",
+                name: "Koduvally Kozhikode",
+              },
+              hasOfferCatalog: {
+                "@type": "OfferCatalog",
+                name: "Nazmi Boutique Purchase Offers",
+                itemListElement: [
+                  {
+                    "@type": "Offer",
+                    name: "Above ₹2000 Purchase Lucky Draw",
+                    description: "Win Smart TV and three prize categories for purchases above ₹2000.",
+                    availability: "https://schema.org/InStock",
+                    priceCurrency: "INR",
+                  },
+                  {
+                    "@type": "Offer",
+                    name: "Free Delivery within 3 km",
+                    description: "Complimentary delivery for all nearby customers within 3 km radius.",
+                  },
+                ],
+              },
               sameAs: [
                 "https://www.instagram.com/nazmiboutique/",
-                "https://www.facebook.com/nazmiboutique/"
-              ]
+                "https://www.facebook.com/nazmiboutique/",
+                "https://maps.google.com/?q=Nazmi+Boutique+Koduvally+Kozhikode"
+              ],
             }),
           }}
         />
       </head>
 
       <body className="min-h-screen flex flex-col bg-white text-gray-900 font-sans antialiased">
-        {/* Header - No announcement bar */}
         <Header />
-
-        {/* Main Content */}
-        <main className="flex-1 w-full">
-          {children}
-        </main>
-
-        {/* Footer */}
+        <main className="flex-1 w-full">{children}</main>
         <Footer />
-
-        {/* WhatsApp Button */}
         <WhatsAppButton
           phone="+919995947709"
-          preset="Hello Nazmi Boutique! I'm interested in your collections and would like to know more."
+          preset="Hello Nazmi Boutique! I'm interested in your collections and offers above ₹2000."
         />
       </body>
     </html>

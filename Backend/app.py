@@ -31,6 +31,7 @@ app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'True') in ['True', 'true
 app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'False') in ['True', 'true', '1']
 app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
 
+
 # Behaviour
 JWT_EXPIRES_DAYS = int(os.getenv('JWT_EXPIRES_DAYS', 7))
 ALLOW_GUEST_CHECKOUT = os.getenv('ALLOW_GUEST_CHECKOUT', 'true').lower() == 'true'
@@ -698,8 +699,25 @@ def subscribe():
     db.newsletter.update_one({'email': email}, {'$set': {'email': email, 'subscribed_at': datetime.utcnow()}}, upsert=True)
     send_simple_email('Subscribed to NAZMI Newsletter', [email], 'Thanks for subscribing to our newsletter!')
     return jsonify({'message': 'Subscribed'})
-
 # ------------------- RUN APP -------------------
+
+# ✅ Add this test email route before the app.run section
+@app.route('/api/send-test-email', methods=['GET'])
+def send_test_email():
+    """Simple route to test email configuration."""
+    try:
+        msg = Message(
+            subject="Nazmi Boutique Email Test",
+            recipients=["nazmiboutique1@gmail.com"],
+            body="✅ Test email from Flask app — your Gmail SMTP settings work!"
+        )
+        mail.send(msg)
+        return jsonify({"message": "Test email sent successfully!"}), 200
+    except Exception as e:
+        print("Email send error:", e)
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == '__main__':
     print("🚀 Starting NAZMI Boutique Backend...")
     print("📍 Listening on http://127.0.0.1:5000")
@@ -707,4 +725,5 @@ if __name__ == '__main__':
     print("   - http://127.0.0.1:5000/api/debug/db")
     print("   - http://127.0.0.1:5000/api/debug/products")
     print("   - http://127.0.0.1:5000/api/debug/stock")
+    print("   - http://127.0.0.1:5000/api/send-test-email  ✅ (new)")
     app.run(debug=True, port=5000, host='0.0.0.0')
